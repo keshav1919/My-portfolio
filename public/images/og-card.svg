@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#0F172A"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <circle cx="180" cy="315" r="105" fill="#fff" opacity=".12"/>
+  <text x="125" y="355" font-family="system-ui" font-size="125" font-weight="800" fill="#fff">K</text>
+  <text x="340" y="285" font-family="system-ui" font-size="90" font-weight="800" fill="#fff">Keshav</text>
+  <text x="345" y="370" font-family="system-ui" font-size="42" fill="#BFDBFE">Frontend Web Developer</text>
+</svg>
