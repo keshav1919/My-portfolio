@@ -22,7 +22,7 @@ export function ThemeProvider({ children }) {
     document.documentElement.dataset.theme = theme;
     safeStorage.set(STORAGE_KEYS.theme, preference);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'dark' ? '#0F172A' : '#2563EB';
+    if (meta) meta.content = theme === 'dark' ? '#030712' : '#020617';
   }, [theme, preference]);
 
   const value = useMemo(() => ({ theme, preference, setPreference }), [theme, preference]);

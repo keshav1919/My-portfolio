@@ -13,7 +13,7 @@ export function Navbar() {
         <nav className="desktop-nav" aria-label="Primary navigation">
           {mainNavigation.map(({ label, path }) => <NavLink key={path} to={path}>{label}</NavLink>)}
         </nav>
-        <button className="icon-button" aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`} onClick={() => setPreference(theme === 'dark' ? 'light' : 'dark')}>
+        <button className="icon-button" aria-label={`Switch to ${theme === 'dark' ? 'electric' : 'midnight'} palette`} onClick={() => setPreference(theme === 'dark' ? 'light' : 'dark')}>
           {theme === 'dark' ? <Sun /> : <Moon />}
         </button>
       </div>
