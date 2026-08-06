@@ -1,17 +1,15 @@
-import { Award, BriefcaseBusiness, Cake, GraduationCap, Mail, Download, ArrowRight, UserRound, FolderKanban, Wrench } from 'lucide-react';
+import { Award, BriefcaseBusiness, Cake, GraduationCap, Mail, Download, ArrowRight, UserRound, FolderKanban, Wrench, Code2, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageContainer } from '../components/common/PageContainer';
 import { SEO } from '../components/common/SEO';
 import { AppButton } from '../components/common/AppButton';
 import { AnimatedCard } from '../components/common/AnimatedCard';
 import { SectionTitle } from '../components/common/SectionTitle';
-import { ProfileHeader } from '../components/portfolio/ProfileHeader';
 import { StatCard } from '../components/portfolio/StatCard';
 import { ProjectCard } from '../components/portfolio/ProjectCard';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { skillGroups } from '../data/skills';
-import { useToast } from '../context/ToastContext';
 import { isConfigured } from '../utils/links';
 
 const quickLinks = [
@@ -22,16 +20,42 @@ const quickLinks = [
 ];
 
 export default function Home() {
-  const { showToast } = useToast();
   const resumeReady = isConfigured(profile.resumeUrl);
   return (
     <PageContainer>
       <SEO title="Home" description="Keshav is a frontend web developer creating responsive and modern web experiences." path="/home" />
-      <section className="hero">
-        <ProfileHeader compact />
-        <div className="hero__actions">
-          <AppButton href={resumeReady ? profile.resumeUrl : undefined} icon={Download} onClick={!resumeReady ? () => showToast('Resume link is not configured yet.') : undefined}>Download Resume</AppButton>
-          <AppButton to="/contact" variant="secondary" icon={Mail}>Contact Me</AppButton>
+      <section className="hero hero--showcase">
+        <div className="hero-showcase__copy">
+          <div className="hero-availability"><span /> Available for opportunities</div>
+          <span className="eyebrow"><Code2 size={15} /> Frontend developer · Punjab, India</span>
+          <h1>Building digital experiences that <span>feel as good as they look.</span></h1>
+          <p>I turn ambitious ideas into fast, responsive and memorable interfaces—crafted with clean code and careful attention to every interaction.</p>
+          <div className="hero__actions">
+            <AppButton to="/projects" icon={Sparkles}>Explore My Work</AppButton>
+            <AppButton to="/contact" variant="secondary" icon={Mail}>Start a Project</AppButton>
+            {resumeReady && <AppButton href={profile.resumeUrl} variant="ghost" icon={Download}>Resume</AppButton>}
+          </div>
+          <div className="hero-stack" aria-label="Core technologies">
+            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span><span>Vite</span>
+          </div>
+        </div>
+        <div className="hero-showcase__visual">
+          <div className="hero-portrait-frame">
+            <img src={profile.profileImage} alt="Keshav, frontend web developer" width="1000" height="1000" decoding="async" fetchPriority="high" />
+            <div className="hero-portrait-frame__glow" aria-hidden="true" />
+          </div>
+          <div className="hero-terminal" aria-hidden="true">
+            <div className="hero-terminal__bar"><span /><span /><span /><code>keshav.dev</code></div>
+            <div className="hero-terminal__body">
+              <span><b>const</b> experience = &#123;</span>
+              <span>&nbsp;&nbsp;design: <em>'intentional'</em>,</span>
+              <span>&nbsp;&nbsp;code: <em>'clean &amp; fast'</em>,</span>
+              <span>&nbsp;&nbsp;impact: <em>'memorable'</em></span>
+              <span>&#125;;</span>
+            </div>
+          </div>
+          <div className="hero-floating-badge hero-floating-badge--top"><strong>15+</strong><span>Projects crafted</span></div>
+          <div className="hero-floating-badge hero-floating-badge--bottom"><span className="hero-live-dot" /><div><strong>Available</strong><span>for new builds</span></div></div>
         </div>
       </section>
 

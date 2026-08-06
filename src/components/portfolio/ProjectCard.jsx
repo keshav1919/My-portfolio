@@ -9,7 +9,7 @@ export function ProjectCard({ project }) {
   return (
     <div ref={ref} className={`reveal project-card-wrap ${visible ? 'is-visible' : ''}`}>
       <Card className="project-card" as="article">
-        <img src={project.image} alt={`${project.name} project preview`} width="800" height="480" loading="lazy" onError={(e) => { e.currentTarget.hidden = true; }} />
+        <img src={project.image} alt={`${project.name} project preview`} width="800" height="480" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.hidden = true; }} />
         <div className="project-card__body">
           <span className="project-category">{project.category}</span>
           <h2>{project.name}</h2>
