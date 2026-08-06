@@ -36,7 +36,7 @@ export default function Home() {
             {resumeReady && <AppButton href={profile.resumeUrl} variant="ghost" icon={Download}>Resume</AppButton>}
           </div>
           <div className="hero-stack" aria-label="Core technologies">
-            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span><span>Vite</span>
+            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span>
           </div>
         </div>
         <div className="hero-showcase__visual">

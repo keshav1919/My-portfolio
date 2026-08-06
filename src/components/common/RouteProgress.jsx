@@ -8,7 +8,7 @@ export function RouteProgress() {
   useEffect(() => {
     setActive(false);
     const frame = window.requestAnimationFrame(() => setActive(true));
-    const done = window.setTimeout(() => setActive(false), 720);
+    const done = window.setTimeout(() => setActive(false), 880);
     return () => {
       window.cancelAnimationFrame(frame);
       window.clearTimeout(done);
