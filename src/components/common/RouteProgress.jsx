@@ -17,12 +17,7 @@ export function RouteProgress() {
 
   return (
     <div className={`route-progress ${active ? 'is-active' : ''}`} role="progressbar" aria-label="Loading page">
-      <span className="route-progress__line" key={`line-${pathname}`} />
-      <span className="route-progress__storm" key={`storm-${pathname}`} aria-hidden="true">
-        <i className="route-progress__branch route-progress__branch--one" />
-        <i className="route-progress__branch route-progress__branch--two" />
-        <i className="route-progress__branch route-progress__branch--three" />
-      </span>
+      <span key={pathname} />
     </div>
   );
 }
