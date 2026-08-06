@@ -11,7 +11,7 @@ export function Navbar() {
       <div className="container topbar__inner">
         <NavLink to="/home" className="brand" aria-label="Keshav home">
           <span className="brand__mark"><img src={profile.brandLogo} alt="" /></span>
-          <span className="brand__identity"><strong>Keshav<span>.dev</span></strong><small>Frontend developer</small></span>
+          <span className="brand__identity"><strong>Keshav <span>Coder</span></strong><small>Frontend developer</small></span>
         </NavLink>
         <nav className="desktop-nav" aria-label="Primary navigation">
           {mainNavigation.map(({ label, path, icon: Icon }) => <NavLink key={path} to={path}><Icon aria-hidden="true" /><span>{label}</span></NavLink>)}
