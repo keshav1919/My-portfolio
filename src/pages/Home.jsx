@@ -22,7 +22,7 @@ const quickLinks = [
 export default function Home() {
   const resumeReady = isConfigured(profile.resumeUrl);
   return (
-    <PageContainer>
+    <PageContainer className="home-page">
       <SEO title="Home" description="Keshav is a frontend web developer creating responsive and modern web experiences." path="/home" />
       <section className="hero hero--showcase">
         <div className="hero-showcase__copy">
@@ -54,14 +54,14 @@ export default function Home() {
               <span>&#125;;</span>
             </div>
           </div>
-          <div className="hero-floating-badge hero-floating-badge--top"><strong>15+</strong><span>Projects crafted</span></div>
+          <div className="hero-floating-badge hero-floating-badge--top"><strong>4</strong><span>Projects crafted</span></div>
           <div className="hero-floating-badge hero-floating-badge--bottom"><span className="hero-live-dot" /><div><strong>Available</strong><span>for new builds</span></div></div>
         </div>
       </section>
 
       <section className="stats-grid" aria-label="Developer statistics">
         <StatCard label="Experience" value="1 Year" icon={BriefcaseBusiness} />
-        <StatCard label="Projects" value="15+" icon={Award} delay={60} />
+        <StatCard label="Projects" value="4" icon={Award} delay={60} />
         <StatCard label="Age" value="19" icon={Cake} delay={120} />
         <StatCard label="Education" value="12th Pass" icon={GraduationCap} delay={180} />
       </section>
@@ -76,8 +76,8 @@ export default function Home() {
       </section>
 
       <section className="section-block">
-        <SectionTitle eyebrow="Selected work" title="Recent projects" description="A few interface projects built with lightweight frontend technologies." />
-        <div className="project-grid project-grid--home">{projects.slice(0, 3).map((project) => <ProjectCard key={project.id} project={project} />)}</div>
+        <SectionTitle eyebrow="Selected work" title="Four featured projects" description="My complete collection of responsive interface and website projects." />
+        <div className="project-grid project-grid--home">{projects.map((project) => <ProjectCard key={project.id} project={project} />)}</div>
         <div className="section-action"><AppButton to="/projects" variant="secondary">View all projects</AppButton></div>
       </section>
 

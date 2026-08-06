@@ -1,4 +1,4 @@
-import { Moon, Sun } from 'lucide-react';
+import { Github, Moon, Sun } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { mainNavigation } from '../../data/navigation';
 import { profile } from '../../data/profile';
@@ -11,11 +11,14 @@ export function Navbar() {
       <div className="container topbar__inner">
         <NavLink to="/home" className="brand" aria-label="Keshav home"><span><img src={profile.brandLogo} alt="" /></span><strong>Keshav</strong></NavLink>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {mainNavigation.map(({ label, path }) => <NavLink key={path} to={path}>{label}</NavLink>)}
+          {mainNavigation.map(({ label, path, icon: Icon }) => <NavLink key={path} to={path}><Icon aria-hidden="true" /><span>{label}</span></NavLink>)}
         </nav>
-        <button className="icon-button" aria-label={`Switch to ${theme === 'dark' ? 'electric' : 'midnight'} palette`} onClick={() => setPreference(theme === 'dark' ? 'light' : 'dark')}>
-          {theme === 'dark' ? <Sun /> : <Moon />}
-        </button>
+        <div className="topbar__actions">
+          <a className="header-github" href={profile.github} target="_blank" rel="noopener noreferrer"><Github aria-hidden="true" /><span>GitHub</span></a>
+          <button className="icon-button" aria-label={`Switch to ${theme === 'dark' ? 'electric' : 'midnight'} palette`} onClick={() => setPreference(theme === 'dark' ? 'light' : 'dark')}>
+            {theme === 'dark' ? <Sun /> : <Moon />}
+          </button>
+        </div>
       </div>
     </header>
   );

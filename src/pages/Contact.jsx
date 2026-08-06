@@ -29,7 +29,7 @@ export default function Contact() {
   return (
     <PageContainer>
       <SEO title="Contact" description="Contact Keshav by email, phone or social links." path="/contact" />
-      <SectionTitle eyebrow="Contact" title="Let’s discuss your next website" description="No backend form is used. Contact actions open your device's native apps or configured links." />
+      <SectionTitle eyebrow="Contact" title="Let’s discuss your next website" description="Send me an email directly and your message will arrive in my inbox." />
       <section className="contact-grid">{contactItems.map(({ key, label, icon: Icon, getHref, external }) => {
         const value = profile[key];
         const ready = key === 'location' || isConfigured(value);
@@ -44,7 +44,7 @@ export default function Contact() {
           </Card>
         );
       })}</section>
-      <section className="cta"><div><span className="eyebrow">Start a conversation</span><h2>Have a frontend project in mind?</h2><p>Add your real email in <code>src/data/profile.js</code>, then this button opens a ready mail message.</p></div><AppButton href={isConfigured(profile.email) ? `mailto:${profile.email}?subject=Frontend%20Project` : undefined} icon={Mail} disabled={!isConfigured(profile.email)}>Send Email</AppButton></section>
+      <section className="cta"><div><span className="eyebrow">Start a conversation</span><h2>Have a frontend project in mind?</h2><p>Tell me about your project, timeline and goals. Your email will be sent directly to my inbox.</p></div><AppButton href={isConfigured(profile.email) ? `mailto:${profile.email}?subject=Frontend%20Project%20Inquiry&body=Hi%20Keshav%2C%0A%0AI%27d%20like%20to%20discuss%20a%20website%20project.%0A%0AProject%20details%3A%20` : undefined} icon={Mail} disabled={!isConfigured(profile.email)}>Email Keshav</AppButton></section>
     </PageContainer>
   );
 }
