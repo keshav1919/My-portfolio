@@ -31,6 +31,14 @@ export default function Home() {
         <div className="hero__copy">
           <p className="hero__intro">Hello, I&apos;m Keshav — frontend developer.</p>
           <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
+          <div className="hero-orbit" aria-hidden="true">
+            <span className="hero-orbit__ring hero-orbit__ring--outer" />
+            <span className="hero-orbit__ring hero-orbit__ring--inner" />
+            <span className="hero-orbit__node hero-orbit__node--react">React</span>
+            <span className="hero-orbit__node hero-orbit__node--javascript">JavaScript</span>
+            <span className="hero-orbit__node hero-orbit__node--responsive">Responsive UI</span>
+            <div className="hero-orbit__core"><Code2 /><span>Frontend system</span><strong>KESHAV.DEV</strong><small><i /> Interface live</small></div>
+          </div>
           <div className="hero__support">
             <p>{profile.shortBio}</p>
             <div className="hero__actions"><AppButton to="/projects" icon={ArrowDownRight}>View my work</AppButton><AppButton to="/contact" variant="secondary" icon={ArrowUpRight}>Let&apos;s talk</AppButton></div>
