@@ -1,9 +1,10 @@
-import { Home, FolderKanban, Wrench, Mail, Settings } from 'lucide-react';
+import { BriefcaseBusiness, FolderKanban, Home, Mail, UserRound, Wrench } from 'lucide-react';
 
 export const mainNavigation = [
   { label: 'Home', path: '/home', icon: Home },
-  { label: 'Projects', path: '/projects', icon: FolderKanban },
+  { label: 'Work', path: '/projects', icon: FolderKanban },
+  { label: 'About', path: '/about', icon: UserRound },
   { label: 'Skills', path: '/skills', icon: Wrench },
-  { label: 'Contact', path: '/contact', icon: Mail },
-  { label: 'Settings', path: '/settings', icon: Settings }
+  { label: 'Experience', path: '/experience', icon: BriefcaseBusiness },
+  { label: 'Contact', path: '/contact', icon: Mail }
 ];

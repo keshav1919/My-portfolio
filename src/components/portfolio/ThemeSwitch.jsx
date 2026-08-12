@@ -1,7 +1,7 @@
-import { Monitor, Moon, Zap } from 'lucide-react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
-const options = [{ id: 'light', label: 'Electric', icon: Zap }, { id: 'dark', label: 'Midnight', icon: Moon }, { id: 'system', label: 'System', icon: Monitor }];
+const options = [{ id: 'dark', label: 'Deep dark', icon: Moon }, { id: 'light', label: 'Soft light', icon: Sun }, { id: 'system', label: 'System', icon: Monitor }];
 export function ThemeSwitch() {
   const { preference, setPreference } = useTheme();
   return <div className="theme-switch" role="radiogroup" aria-label="Theme selection">{options.map(({ id, label, icon: Icon }) => (

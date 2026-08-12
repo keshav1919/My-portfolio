@@ -14,7 +14,8 @@ export default [
     plugins: { 'react-hooks': reactHooks },
     rules: {
       ...js.configs.recommended.rules,
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // JSX component references are not visible to ESLint core without adding a full React lint package.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z]', argsIgnorePattern: '^_|^[A-Z]' }],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error'
     }

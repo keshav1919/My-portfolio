@@ -1,14 +1,10 @@
 export const skillGroups = [
   {
-    title: 'Frontend Skills',
-    type: 'progress',
-    items: [
-      { name: 'HTML', value: 95 }, { name: 'CSS', value: 90 },
-      { name: 'JavaScript', value: 85 }, { name: 'Tailwind CSS', value: 88 },
-      { name: 'React', value: 80 }, { name: 'Git', value: 78 },
-      { name: 'Responsive Design', value: 92 }
-    ]
+    title: 'Frontend',
+    description: 'The technologies behind my responsive, component-based interfaces.',
+    items: ['React', 'JavaScript', 'HTML', 'Responsive Design']
   },
-  { title: 'Tools', type: 'list', items: ['VS Code', 'GitHub', 'Figma'] },
-  { title: 'Soft Skills', type: 'list', items: ['Problem Solving', 'Quick Learner', 'Teamwork'] }
+  { title: 'Styling', description: 'Visual foundations for clean, adaptable and polished layouts.', items: ['CSS', 'Tailwind CSS', 'UI Design'] },
+  { title: 'Tools', description: 'The tools that support my development and design workflow.', items: ['Git', 'GitHub', 'VS Code', 'Figma'] },
+  { title: 'Strengths', description: 'How I approach learning, collaboration and technical challenges.', items: ['Problem Solving', 'Quick Learner', 'Teamwork'] }
 ];

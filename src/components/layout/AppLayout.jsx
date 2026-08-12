@@ -1,8 +1,10 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { ArrowUpRight, Github, Mail, Settings } from 'lucide-react';
 import { useEffect } from 'react';
-import { Navbar } from './Navbar';
-import { MobileBottomNav } from './MobileBottomNav';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { mainNavigation } from '../../data/navigation';
+import { profile } from '../../data/profile';
 import { ScrollToTopButton } from '../common/ScrollToTopButton';
+import { Navbar } from './Navbar';
 
 export function AppLayout() {
   const { pathname } = useLocation();
@@ -12,8 +14,18 @@ export function AppLayout() {
       <a className="skip-link" href="#main-content">Skip to content</a>
       <Navbar />
       <main id="main-content" className="main-content"><Outlet /></main>
-      <footer className="footer"><div className="container">© {new Date().getFullYear()} Keshav. Built with React and care.</div></footer>
-      <MobileBottomNav />
+      <footer className="footer">
+        <div className="container footer__inner">
+          <div className="footer__brand"><Link to="/home">KESHAV<span>.</span></Link><p>Frontend Developer<br />Punjab, India</p></div>
+          <nav aria-label="Footer navigation">{mainNavigation.map(({ label, path }) => <Link key={path} to={path}>{label}</Link>)}<Link to="/settings"><Settings /> Settings</Link></nav>
+          <div className="footer__contact">
+            <span>Find me online</span>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <Github /></a>
+            <a href={`mailto:${profile.email}`}>Email <Mail /></a>
+          </div>
+          <div className="footer__bottom"><span>&copy; {new Date().getFullYear()} Keshav. Built with React and care.</span><button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Back to top <ArrowUpRight /></button></div>
+        </div>
+      </footer>
       <ScrollToTopButton />
     </>
   );

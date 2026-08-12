@@ -6,7 +6,7 @@ const ThemeContext = createContext(null);
 const getSystemTheme = () => window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
 export function ThemeProvider({ children }) {
-  const [preference, setPreference] = useState(() => safeStorage.get(STORAGE_KEYS.theme, 'system'));
+  const [preference, setPreference] = useState(() => safeStorage.get(STORAGE_KEYS.theme, 'dark'));
   const [systemTheme, setSystemTheme] = useState(getSystemTheme);
   const theme = preference === 'system' ? systemTheme : preference;
 
@@ -22,7 +22,7 @@ export function ThemeProvider({ children }) {
     document.documentElement.dataset.theme = theme;
     safeStorage.set(STORAGE_KEYS.theme, preference);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'dark' ? '#030712' : '#020617';
+    if (meta) meta.content = theme === 'dark' ? '#090909' : '#f2f1ed';
   }, [theme, preference]);
 
   const value = useMemo(() => ({ theme, preference, setPreference }), [theme, preference]);

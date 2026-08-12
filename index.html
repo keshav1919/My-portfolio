@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#020617" />
+    <meta name="theme-color" content="#090909" />
     <meta name="description" content="Keshav is a frontend web developer from Punjab, India." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Keshav — Frontend Web Developer" />
@@ -17,11 +17,11 @@
       (() => {
         try {
           const saved = localStorage.getItem('keshav-theme');
-          const theme = saved === 'system' || !saved
+          const theme = saved === 'system'
             ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-            : saved;
+            : (saved || 'dark');
           document.documentElement.dataset.theme = theme;
-        } catch { document.documentElement.dataset.theme = 'light'; }
+        } catch { document.documentElement.dataset.theme = 'dark'; }
       })();
     </script>
   </head>
