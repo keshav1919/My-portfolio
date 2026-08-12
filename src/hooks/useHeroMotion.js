@@ -26,8 +26,8 @@ export function useHeroMotion() {
       hero.style.setProperty('--note-two-y', `${currentY * -0.45}px`);
       hero.style.setProperty('--ambient-x', `${currentX * 0.25}px`);
       hero.style.setProperty('--ambient-y', `${currentY * 0.2}px`);
-      hero.style.setProperty('--orbit-x', `${currentX * 0.5}px`);
-      hero.style.setProperty('--orbit-y', `${currentY * 0.42}px`);
+      hero.style.setProperty('--promo-x', `${currentX * 0.5}px`);
+      hero.style.setProperty('--promo-y', `${currentY * 0.42}px`);
 
       if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
         frame = window.requestAnimationFrame(writePosition);

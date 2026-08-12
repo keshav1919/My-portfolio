@@ -31,13 +31,36 @@ export default function Home() {
         <div className="hero__copy">
           <p className="hero__intro">Hello, I&apos;m Keshav — frontend developer.</p>
           <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
-          <div className="hero-orbit" aria-hidden="true">
-            <span className="hero-orbit__ring hero-orbit__ring--outer" />
-            <span className="hero-orbit__ring hero-orbit__ring--inner" />
-            <span className="hero-orbit__node hero-orbit__node--react">React</span>
-            <span className="hero-orbit__node hero-orbit__node--javascript">JavaScript</span>
-            <span className="hero-orbit__node hero-orbit__node--responsive">Responsive UI</span>
-            <div className="hero-orbit__core"><Code2 /><span>Frontend system</span><strong>KESHAV.DEV</strong><small><i /> Interface live</small></div>
+          <div className="hero-code-promo" aria-hidden="true">
+            <div className="hero-code-promo__bar"><span><i /><i /><i /></span><strong>skills.tsx</strong><small>LIVE LOOP</small></div>
+            <div className="hero-code-promo__screen">
+              <div className="hero-code-promo__scene hero-code-promo__scene--ui">
+                <span className="promo-kicker">01 / UI IMPLEMENTATION</span>
+                <code><i>01</i><span><b>const</b> interface = {'{'}</span></code>
+                <code><i>02</i><span>&nbsp;&nbsp;visual: <em>&apos;polished&apos;</em>,</span></code>
+                <code><i>03</i><span>&nbsp;&nbsp;details: <em>&apos;thoughtful&apos;</em>,</span></code>
+                <code><i>04</i><span>{'}'};</span></code>
+                <strong>Clean UI.<br />Built with care.</strong>
+              </div>
+              <div className="hero-code-promo__scene hero-code-promo__scene--responsive">
+                <span className="promo-kicker">02 / RESPONSIVE DESIGN</span>
+                <code><i>01</i><span><b>@media</b> (width &lt;= 430px) {'{'}</span></code>
+                <code><i>02</i><span>&nbsp;&nbsp;layout: <em>adaptive</em>;</span></code>
+                <code><i>03</i><span>&nbsp;&nbsp;overflow: <em>none</em>;</span></code>
+                <code><i>04</i><span>{'}'}</span></code>
+                <strong>Every screen.<br />One smooth experience.</strong>
+              </div>
+              <div className="hero-code-promo__scene hero-code-promo__scene--react">
+                <span className="promo-kicker">03 / REACT INTERFACES</span>
+                <code><i>01</i><span><b>function</b> Experience() {'{'}</span></code>
+                <code><i>02</i><span>&nbsp;&nbsp;<b>return</b> &lt;Interface</span></code>
+                <code><i>03</i><span>&nbsp;&nbsp;&nbsp;&nbsp;clean responsive /&gt;;</span></code>
+                <code><i>04</i><span>{'}'}</span></code>
+                <strong>Reusable pieces.<br />Effortless results.</strong>
+              </div>
+              <span className="hero-code-promo__cursor">_</span>
+            </div>
+            <div className="hero-code-promo__footer"><span><i /> Compiled successfully</span><div><i /><i /><i /></div></div>
           </div>
           <div className="hero__support">
             <p>{profile.shortBio}</p>
