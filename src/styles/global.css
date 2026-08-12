@@ -270,20 +270,15 @@ p { color: var(--muted); }
 .promo-page-dots i:first-child { animation-delay: -12s; }
 .promo-page-dots i:nth-child(2) { animation-delay: -8s; }
 .promo-page-dots i:nth-child(3) { animation-delay: -4s; }
-.promo-app::before { content: ''; position: absolute; z-index: 1; inset: -24%; pointer-events: none; opacity: .7; transform: translate3d(-4%,2%,0); animation: promo-light-aurora 8s ease-in-out infinite alternate; }
-.promo-app--light::before { background: radial-gradient(circle at 72% 28%,rgba(176,192,239,.28),transparent 20%),radial-gradient(circle at 27% 72%,rgba(255,202,187,.22),transparent 19%); }
-.promo-app--dark::before { opacity: .9; background: radial-gradient(circle at 78% 25%,rgba(147,131,234,.2),transparent 22%),radial-gradient(circle at 22% 74%,rgba(90,190,180,.1),transparent 18%); animation-name: promo-dark-aurora; }
-.promo-spark-field { position: absolute; z-index: 5; inset: 42px 0 40px; overflow: hidden; pointer-events: none; }
-.promo-spark-field > i { position: absolute; top: var(--spark-y); left: var(--spark-x); width: 6px; height: 6px; opacity: 0; transform: translate3d(0,8px,0) scale(.25) rotate(0); animation: promo-light-spark var(--spark-duration) var(--spark-delay) ease-in-out infinite; }
-.promo-spark-field > i::before, .promo-spark-field > i::after { content: ''; position: absolute; top: 50%; left: 50%; border-radius: 999px; transform: translate(-50%,-50%); }
-.promo-app--light .promo-spark-field > i { border-radius: 50%; background: radial-gradient(circle,#fff 0 22%,#d8c5f2 28% 47%,rgba(177,192,237,.22) 50% 70%,transparent 72%); box-shadow: 0 0 0 3px rgba(174,187,234,.07); }
-.promo-app--light .promo-spark-field > i::before { width: 12px; height: 1px; background: linear-gradient(90deg,transparent,rgba(128,114,163,.55),transparent); }
-.promo-app--light .promo-spark-field > i::after { width: 1px; height: 12px; background: linear-gradient(transparent,rgba(128,114,163,.55),transparent); }
-.promo-app--dark .promo-spark-field > i { width: 5px; height: 5px; background: #dad7ff; box-shadow: 0 0 8px rgba(191,190,228,.7),0 0 18px rgba(134,120,225,.28); animation-name: promo-dark-spark; }
-.promo-app--dark .promo-spark-field > i::before { width: 15px; height: 1px; background: linear-gradient(90deg,transparent,rgba(218,215,255,.85),transparent); }
-.promo-app--dark .promo-spark-field > i::after { width: 1px; height: 15px; background: linear-gradient(transparent,rgba(218,215,255,.9),transparent); }
-.promo-spark-field > i:nth-child(3n) { width: 4px; height: 4px; }
-.promo-spark-field > i:nth-child(2n) { animation-direction: reverse; }
+.device-scene-orbits { --orbit-one: rgba(191,190,228,.34); --orbit-two: rgba(135,202,183,.2); position: absolute; z-index: 0; top: 30px; right: -6px; width: 360px; height: 310px; pointer-events: none; transform: rotate(-9deg); }
+.device-promo-scene--iphone .device-scene-orbits { --orbit-one: rgba(222,202,239,.4); --orbit-two: rgba(244,204,177,.25); top: 16px; right: 18px; width: 330px; height: 350px; transform: rotate(8deg); }
+.device-scene-orbits > span { position: absolute; inset: 0; border: 1px solid var(--orbit-one); border-radius: 50%; animation: device-orbit-breathe 6.5s ease-in-out infinite alternate; }
+.device-scene-orbits > span::after { content: ''; position: absolute; top: -4px; left: 50%; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(191,190,228,.08),0 0 18px rgba(191,190,228,.5); animation: device-orbit-glint 7.2s linear infinite; transform-origin: 0 159px; }
+.device-scene-orbits > span:nth-child(2) { inset: 34px 48px; border-color: var(--orbit-two); animation-duration: 5.4s; animation-direction: alternate-reverse; }
+.device-scene-orbits > span:nth-child(2)::after { width: 5px; height: 5px; background: #8fd1bc; box-shadow: 0 0 14px rgba(143,209,188,.44); animation-duration: 9.4s; animation-direction: reverse; transform-origin: 0 112px; }
+.device-promo-scene--iphone .device-scene-orbits > span::after { background: #f2d5ba; box-shadow: 0 0 0 5px rgba(242,213,186,.08),0 0 16px rgba(220,191,238,.45); }
+.device-promo-scene--iphone .device-scene-orbits > span:nth-child(2)::after { background: #c8b8e6; box-shadow: 0 0 14px rgba(200,184,230,.45); }
+.device-scene-orbits > i { position: absolute; inset: 78px 104px; border: 1px dashed color-mix(in srgb,var(--orbit-one) 52%,transparent); border-radius: 50%; animation: device-orbit-spin 18s linear infinite; }
 .promo-device--macbook .promo-app__header { height: 34px; padding: 0 18px; }
 .promo-device--macbook .promo-app__tour { inset: 34px 0 34px; }
 .promo-device--macbook .promo-app__nav { height: 34px; justify-content: flex-end; gap: 28px; padding-inline: 20px; }
@@ -661,10 +656,9 @@ p { color: var(--muted); }
 @keyframes promo-theme-pulse { 0%,100% { transform: rotate(0) scale(1); } 50% { transform: rotate(12deg) scale(1.07); } }
 @keyframes promo-screen-sheen { 0%,65% { transform: translateX(-130%); } 82%,100% { transform: translateX(130%); } }
 @keyframes promo-spotlight { from { transform: translate3d(-8px,4px,0) scale(.94); opacity: .65; } to { transform: translate3d(10px,-7px,0) scale(1.06); opacity: 1; } }
-@keyframes promo-light-aurora { from { transform: translate3d(-4%,2%,0) rotate(-2deg) scale(.96); } to { transform: translate3d(5%,-3%,0) rotate(3deg) scale(1.04); } }
-@keyframes promo-dark-aurora { from { transform: translate3d(5%,-2%,0) rotate(2deg) scale(.98); } to { transform: translate3d(-5%,4%,0) rotate(-3deg) scale(1.06); } }
-@keyframes promo-light-spark { 0%,16%,100% { opacity: 0; transform: translate3d(-3px,7px,0) scale(.25) rotate(0); } 34% { opacity: .92; transform: translate3d(0,0,0) scale(1) rotate(42deg); } 48% { opacity: .45; transform: translate3d(2px,-3px,0) scale(.62) rotate(74deg); } 64% { opacity: 0; transform: translate3d(5px,-7px,0) scale(.2) rotate(95deg); } }
-@keyframes promo-dark-spark { 0%,12%,100% { opacity: 0; transform: translate3d(8px,9px,0) scale(.2) rotate(0); } 31% { opacity: 1; transform: translate3d(0,0,0) scale(1) rotate(45deg); } 52% { opacity: .55; transform: translate3d(-5px,-7px,0) scale(.72) rotate(82deg); } 68% { opacity: 0; transform: translate3d(-9px,-13px,0) scale(.15) rotate(120deg); } }
+@keyframes device-orbit-breathe { from { opacity: .42; transform: scale(.94) rotate(-2deg); } to { opacity: .92; transform: scale(1.04) rotate(2deg); } }
+@keyframes device-orbit-glint { to { transform: rotate(360deg); } }
+@keyframes device-orbit-spin { to { transform: rotate(360deg); } }
 @keyframes promo-chip-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(4px,-7px,0); } }
 @keyframes device-shadow { 0%,100% { opacity: .58; transform: rotate(-4deg) scaleX(.9); } 50% { opacity: .35; transform: rotate(-4deg) scaleX(1.06); } }
 @keyframes device-ui-scroll { 0%,12% { transform: translate3d(0,0,0); } 88%,100% { transform: translate3d(0,-36%,0); } }
@@ -915,8 +909,7 @@ p { color: var(--muted); }
   .device-promo-scene--macbook { opacity: 0; transform: none !important; }
   .promo-view { opacity: 0; transform: none !important; }
   .promo-view:first-child { opacity: 1; }
-  .promo-app::before { animation: none !important; transform: none !important; }
-  .promo-spark-field { display: none; }
+  .device-scene-orbits > span, .device-scene-orbits > span::after, .device-scene-orbits > i { animation: none !important; }
   .skeleton-block::after { animation: none !important; display: none; }
   .route-view, .route-view .page-hero .eyebrow, .route-view .page-hero h2, .route-view .page-hero p { animation: none !important; transform: none !important; }
   .topbar__inner, .hero__topline, .hero__intro, .hero-line > span, .hero__support p, .hero__actions, .hero__socials, .scroll-cue { animation: reduced-entrance .2s ease both !important; transform: none !important; }
