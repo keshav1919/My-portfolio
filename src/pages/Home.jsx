@@ -19,19 +19,13 @@ const services = [
   { title: 'UI implementation', text: 'Careful translation of visual ideas into polished, accessible and usable interfaces.' }
 ];
 
-const promoScenes = [
-  { device: 'mobile', label: '01 / MOBILE UI', title: 'Designed for every tap.', viewport: '360 — 430 PX' },
-  { device: 'laptop', label: '02 / LAPTOP UI', title: 'Flexible across every layout.', viewport: '768 — 1440 PX' },
-  { device: 'desktop', label: '03 / DESKTOP UI', title: 'More space. The same clarity.', viewport: '1440 PX +' }
-];
-
 function PromoDevice({ type }) {
   return (
     <div className={`promo-device promo-device--${type}`}>
       <div className="promo-device__screen">
-        <div className="promo-device__nav"><b>&lt;/&gt;</b><span /><span /></div>
-        <div className="promo-device__hero"><small>RESPONSIVE UI</small><strong>Interfaces<br />that adapt.</strong><i /></div>
-        <div className="promo-device__grid"><i /><i /><i /></div>
+        <div className="promo-device__nav"><b>K.</b><span>Work</span><span>About</span><i /></div>
+        <div className="promo-device__hero"><small>DESIGN × CODE</small><strong>Interfaces<br />that adapt.</strong><i /></div>
+        <div className="promo-device__grid"><i><b>UI</b></i><i><b>React</b></i><i><b>Responsive</b></i></div>
       </div>
     </div>
   );
@@ -50,12 +44,17 @@ export default function Home() {
         <div className="hero__copy">
           <p className="hero__intro">Hello, I&apos;m Keshav — frontend developer.</p>
           <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
-          <div className="hero-code-promo" aria-hidden="true">
-            <div className="hero-code-promo__bar"><span><i /><i /><i /></span><strong>responsive.preview.tsx</strong><small>LIVE LOOP</small></div>
-            <div className="hero-code-promo__screen">
-              {promoScenes.map((scene) => <div className={`hero-code-promo__scene hero-code-promo__scene--${scene.device}`} key={scene.device}><div className="promo-scene__copy"><span>{scene.label}</span><strong>{scene.title}</strong><small>{scene.viewport}</small></div><PromoDevice type={scene.device} /></div>)}
+          <div className="hero-device-showcase" aria-hidden="true">
+            <div className="device-promo-scene device-promo-scene--iphone">
+              <PromoDevice type="iphone" />
+              <div className="device-promo-copy device-promo-copy--mobile"><span>01 / MOBILE UI</span><strong>Designed for<br />every tap.</strong><small>Fast · fluid · responsive</small></div>
+              <span className="device-promo-chip device-promo-chip--mobile">360 → 430 px</span>
             </div>
-            <div className="hero-code-promo__footer"><span><i /> Rendering responsive UI</span><div><i /><i /><i /></div></div>
+            <div className="device-promo-scene device-promo-scene--macbook">
+              <PromoDevice type="macbook" />
+              <div className="device-promo-copy device-promo-copy--desktop"><span>02 / DESKTOP UI</span><strong>Made to work<br />at every scale.</strong><small>Clean · adaptive · precise</small></div>
+              <span className="device-promo-chip device-promo-chip--desktop">Responsive build</span>
+            </div>
           </div>
           <div className="hero__support">
             <p>{profile.shortBio}</p>
