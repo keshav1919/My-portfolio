@@ -18,6 +18,24 @@ const services = [
   { title: 'UI implementation', text: 'Careful translation of visual ideas into polished, accessible and usable interfaces.' }
 ];
 
+const promoScenes = [
+  { device: 'mobile', label: '01 / MOBILE UI', title: 'Designed for every tap.', viewport: '360 — 430 PX' },
+  { device: 'laptop', label: '02 / LAPTOP UI', title: 'Flexible across every layout.', viewport: '768 — 1440 PX' },
+  { device: 'desktop', label: '03 / DESKTOP UI', title: 'More space. The same clarity.', viewport: '1440 PX +' }
+];
+
+function PromoDevice({ type }) {
+  return (
+    <div className={`promo-device promo-device--${type}`}>
+      <div className="promo-device__screen">
+        <div className="promo-device__nav"><b>&lt;/&gt;</b><span /><span /></div>
+        <div className="promo-device__hero"><small>RESPONSIVE UI</small><strong>Interfaces<br />that adapt.</strong><i /></div>
+        <div className="promo-device__grid"><i /><i /><i /></div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const coreSkills = skillGroups.flatMap((group) => group.items).slice(0, 10);
   const heroRef = useHeroMotion();
@@ -32,35 +50,11 @@ export default function Home() {
           <p className="hero__intro">Hello, I&apos;m Keshav — frontend developer.</p>
           <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
           <div className="hero-code-promo" aria-hidden="true">
-            <div className="hero-code-promo__bar"><span><i /><i /><i /></span><strong>skills.tsx</strong><small>LIVE LOOP</small></div>
+            <div className="hero-code-promo__bar"><span><i /><i /><i /></span><strong>responsive.preview.tsx</strong><small>LIVE LOOP</small></div>
             <div className="hero-code-promo__screen">
-              <div className="hero-code-promo__scene hero-code-promo__scene--ui">
-                <span className="promo-kicker">01 / UI IMPLEMENTATION</span>
-                <code><i>01</i><span><b>const</b> interface = {'{'}</span></code>
-                <code><i>02</i><span>&nbsp;&nbsp;visual: <em>&apos;polished&apos;</em>,</span></code>
-                <code><i>03</i><span>&nbsp;&nbsp;details: <em>&apos;thoughtful&apos;</em>,</span></code>
-                <code><i>04</i><span>{'}'};</span></code>
-                <strong>Clean UI.<br />Built with care.</strong>
-              </div>
-              <div className="hero-code-promo__scene hero-code-promo__scene--responsive">
-                <span className="promo-kicker">02 / RESPONSIVE DESIGN</span>
-                <code><i>01</i><span><b>@media</b> (width &lt;= 430px) {'{'}</span></code>
-                <code><i>02</i><span>&nbsp;&nbsp;layout: <em>adaptive</em>;</span></code>
-                <code><i>03</i><span>&nbsp;&nbsp;overflow: <em>none</em>;</span></code>
-                <code><i>04</i><span>{'}'}</span></code>
-                <strong>Every screen.<br />One smooth experience.</strong>
-              </div>
-              <div className="hero-code-promo__scene hero-code-promo__scene--react">
-                <span className="promo-kicker">03 / REACT INTERFACES</span>
-                <code><i>01</i><span><b>function</b> Experience() {'{'}</span></code>
-                <code><i>02</i><span>&nbsp;&nbsp;<b>return</b> &lt;Interface</span></code>
-                <code><i>03</i><span>&nbsp;&nbsp;&nbsp;&nbsp;clean responsive /&gt;;</span></code>
-                <code><i>04</i><span>{'}'}</span></code>
-                <strong>Reusable pieces.<br />Effortless results.</strong>
-              </div>
-              <span className="hero-code-promo__cursor">_</span>
+              {promoScenes.map((scene) => <div className={`hero-code-promo__scene hero-code-promo__scene--${scene.device}`} key={scene.device}><div className="promo-scene__copy"><span>{scene.label}</span><strong>{scene.title}</strong><small>{scene.viewport}</small></div><PromoDevice type={scene.device} /></div>)}
             </div>
-            <div className="hero-code-promo__footer"><span><i /> Compiled successfully</span><div><i /><i /><i /></div></div>
+            <div className="hero-code-promo__footer"><span><i /> Rendering responsive UI</span><div><i /><i /><i /></div></div>
           </div>
           <div className="hero__support">
             <p>{profile.shortBio}</p>
