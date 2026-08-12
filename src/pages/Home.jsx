@@ -23,9 +23,14 @@ function PromoDevice({ type }) {
   return (
     <div className={`promo-device promo-device--${type}`}>
       <div className="promo-device__screen">
-        <div className="promo-device__nav"><b>K.</b><span>Work</span><span>About</span><i /></div>
-        <div className="promo-device__hero"><small>DESIGN × CODE</small><strong>Interfaces<br />that adapt.</strong><i /></div>
-        <div className="promo-device__grid"><i><b>UI</b></i><i><b>React</b></i><i><b>Responsive</b></i></div>
+        <div className="promo-ui-scroll">
+          <div className="promo-device__nav"><b>K.</b><span>Work</span><span>About</span><i /></div>
+          <div className="promo-device__hero"><small>DESIGN × CODE</small><strong>Interfaces<br />that adapt.</strong><i /><div className="promo-ui-orb"><span /></div></div>
+          <div className="promo-ui-marquee"><span>UI DESIGN</span><i /> <span>REACT</span><i /> <span>RESPONSIVE</span><i /></div>
+          <div className="promo-ui-feature"><small>BUILT FOR PEOPLE</small><strong>Clear structure.<br />Thoughtful motion.</strong><span><i /><i /><i /></span></div>
+          <div className="promo-device__grid"><i><b>Reusable UI</b><small>Components</small></i><i><b>Fast layouts</b><small>Responsive</small></i><i><b>Clean motion</b><small>Interaction</small></i></div>
+          <div className="promo-ui-code"><span><i>01</i> interface: polished</span><span><i>02</i> layout: adaptive</span><span><i>03</i> motion: effortless</span></div>
+        </div>
       </div>
     </div>
   );
