@@ -9,6 +9,7 @@ import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { skillGroups } from '../data/skills';
 import { timeline } from '../data/timeline';
+import { useHeroMotion } from '../hooks/useHeroMotion';
 
 const services = [
   { title: 'Frontend development', text: 'Responsive pages and reusable interface components built with modern web foundations.' },
@@ -19,15 +20,17 @@ const services = [
 
 export default function Home() {
   const coreSkills = skillGroups.flatMap((group) => group.items).slice(0, 10);
+  const heroRef = useHeroMotion();
   return (
     <PageContainer className="home-page">
       <SEO title="Frontend Developer" description="Keshav builds clean, responsive and interactive web experiences with React and modern frontend technologies." path="/home" />
 
-      <section className="hero" aria-labelledby="hero-title">
+      <section ref={heroRef} className="hero" aria-labelledby="hero-title">
+        <div className="hero-ambient" aria-hidden="true" />
         <div className="hero__topline"><span className="availability"><i /> Available for opportunities</span><span>{profile.location}</span></div>
         <div className="hero__copy">
           <p className="hero__intro">Hello, I&apos;m Keshav — frontend developer.</p>
-          <h1 id="hero-title">I build digital<br />experiences that<br /><em>feel effortless.</em></h1>
+          <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
           <div className="hero__support">
             <p>{profile.shortBio}</p>
             <div className="hero__actions"><AppButton to="/projects" icon={ArrowDownRight}>View my work</AppButton><AppButton to="/contact" variant="secondary" icon={ArrowUpRight}>Let&apos;s talk</AppButton></div>
@@ -49,6 +52,7 @@ export default function Home() {
           <div className="floating-note floating-note--two"><i /><div><strong>Available</strong><span>for new projects</span></div></div>
         </div>
         <div className="hero__socials"><span>Connect</span><a href={profile.github} target="_blank" rel="noopener noreferrer"><Github /> GitHub</a><a href={`mailto:${profile.email}`}><Mail /> Email</a></div>
+        <div className="scroll-cue" aria-hidden="true"><span>Scroll</span><i /></div>
       </section>
 
       <section className="section-block about-editorial" id="about">

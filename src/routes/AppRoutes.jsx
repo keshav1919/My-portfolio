@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { LoadingScreen } from '../components/common/LoadingScreen';
 
-const Splash = lazy(() => import('../pages/Splash'));
 const Home = lazy(() => import('../pages/Home'));
 const About = lazy(() => import('../pages/About'));
 const Skills = lazy(() => import('../pages/Skills'));
@@ -16,7 +15,7 @@ export function AppRoutes() {
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Routes>
-        <Route path="/" element={<Splash />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
         <Route element={<AppLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
