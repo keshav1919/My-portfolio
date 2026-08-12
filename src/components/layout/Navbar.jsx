@@ -21,9 +21,17 @@ export function Navbar() {
     document.body.classList.toggle('menu-open', open);
     return () => document.body.classList.remove('menu-open');
   }, [open]);
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [open]);
 
   return (
-    <header className={`topbar ${scrolled ? 'is-scrolled' : ''}`}>
+    <header className={`topbar ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-menu-open' : ''}`}>
       <div className="container topbar__inner">
         <NavLink className="brand" to="/home" aria-label="Keshav home">KESHAV<span>.</span></NavLink>
         <nav id="primary-navigation" className={`desktop-nav ${open ? 'is-open' : ''}`} aria-label="Primary navigation">

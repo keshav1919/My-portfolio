@@ -19,17 +19,55 @@ const services = [
   { title: 'UI implementation', text: 'Careful translation of visual ideas into polished, accessible and usable interfaces.' }
 ];
 
-function PromoDevice({ type }) {
+const promoViews = [
+  { name: 'Exchange', className: 'exchange' },
+  { name: 'Insights', className: 'insights' },
+  { name: 'System', className: 'system' }
+];
+
+function PromoView({ view, index }) {
+  if (view.className === 'exchange') {
+    return (
+      <section className={`promo-view promo-view--${view.className}`} style={{ '--view-index': index }}>
+        <div className="promo-view__heading"><span>UI FLOW 01</span><strong>Exchange</strong><small>Simple, clear and fast.</small></div>
+        <div className="promo-swap-card"><small>You send <b>MAX</b></small><div><span className="promo-token promo-token--lavender">K</span><strong>1,240</strong><em>KSH</em></div></div>
+        <span className="promo-swap-icon">↕</span>
+        <div className="promo-swap-card"><small>You receive <b>LIVE</b></small><div><span className="promo-token promo-token--mint">U</span><strong>4,872</strong><em>UIX</em></div></div>
+        <div className="promo-slide"><i /><span>Slide to preview</span><b>››</b></div>
+      </section>
+    );
+  }
+
+  if (view.className === 'insights') {
+    return (
+      <section className={`promo-view promo-view--${view.className}`} style={{ '--view-index': index }}>
+        <div className="promo-view__heading"><span>UI FLOW 02</span><strong>Insights</strong><small>Responsive data, instantly readable.</small></div>
+        <div className="promo-metric"><small>Interaction score</small><strong>98.6%</strong><span>+12.4% this week</span></div>
+        <div className="promo-chart" aria-hidden="true">{[42, 63, 48, 76, 58, 88, 69, 96].map((height, itemIndex) => <i key={height} style={{ '--bar-height': `${height}%`, '--bar-index': itemIndex }} />)}</div>
+        <div className="promo-activity"><span><i />Responsive states</span><b>Ready</b></div>
+        <div className="promo-activity"><span><i />Motion system</span><b>Live</b></div>
+      </section>
+    );
+  }
+
+  return (
+    <section className={`promo-view promo-view--${view.className}`} style={{ '--view-index': index }}>
+      <div className="promo-view__heading"><span>UI FLOW 03</span><strong>Design system</strong><small>Reusable pieces for every screen.</small></div>
+      <div className="promo-component-grid"><span className="is-wide"><i /><b>Navigation</b><small>Adaptive layout</small></span><span><i /><b>Cards</b><small>Clear hierarchy</small></span><span><i /><b>Motion</b><small>Soft feedback</small></span><span className="is-wide"><i /><b>Theme tokens</b><small>Light ↔ Dark</small></span></div>
+      <div className="promo-system-line"><i /><span /><span /><span /></div>
+    </section>
+  );
+}
+
+function PromoDevice({ type, theme }) {
   return (
     <div className={`promo-device promo-device--${type}`}>
       <div className="promo-device__screen">
-        <div className="promo-ui-scroll">
-          <div className="promo-device__nav"><b>K.</b><span>Work</span><span>About</span><i /></div>
-          <div className="promo-device__hero"><small>DESIGN × CODE</small><strong>Interfaces<br />that adapt.</strong><i /><div className="promo-ui-orb"><span /></div></div>
-          <div className="promo-ui-marquee"><span>UI DESIGN</span><i /> <span>REACT</span><i /> <span>RESPONSIVE</span><i /></div>
-          <div className="promo-ui-feature"><small>BUILT FOR PEOPLE</small><strong>Clear structure.<br />Thoughtful motion.</strong><span><i /><i /><i /></span></div>
-          <div className="promo-device__grid"><i><b>Reusable UI</b><small>Components</small></i><i><b>Fast layouts</b><small>Responsive</small></i><i><b>Clean motion</b><small>Interaction</small></i></div>
-          <div className="promo-ui-code"><span><i>01</i> interface: polished</span><span><i>02</i> layout: adaptive</span><span><i>03</i> motion: effortless</span></div>
+        <div className={`promo-app promo-app--${theme}`}>
+          <header className="promo-app__header"><b>K/UX</b><span>Product preview</span><i className="promo-theme-indicator">{theme === 'light' ? '☼' : '◐'}</i></header>
+          <div className="promo-app__tour">{promoViews.map((view, index) => <PromoView key={view.name} view={view} index={index} />)}</div>
+          <footer className="promo-app__nav">{promoViews.map((view, index) => <span key={view.name} style={{ '--nav-index': index }}><i />{view.name}</span>)}</footer>
+          <div className="promo-page-dots"><i /><i /><i /></div>
         </div>
       </div>
     </div>
@@ -51,14 +89,14 @@ export default function Home() {
           <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
           <div className="hero-device-showcase" aria-hidden="true">
             <div className="device-promo-scene device-promo-scene--iphone">
-              <PromoDevice type="iphone" />
-              <div className="device-promo-copy device-promo-copy--mobile"><span>01 / MOBILE UI</span><strong>Designed for<br />every tap.</strong><small>Fast · fluid · responsive</small></div>
-              <span className="device-promo-chip device-promo-chip--mobile">360 → 430 px</span>
+              <PromoDevice type="iphone" theme="light" />
+              <span className="device-promo-chip device-promo-chip--mode">☼ Light interface</span>
+              <span className="device-promo-chip device-promo-chip--tour">Code-built · 3 views</span>
             </div>
             <div className="device-promo-scene device-promo-scene--macbook">
-              <PromoDevice type="macbook" />
-              <div className="device-promo-copy device-promo-copy--desktop"><span>02 / DESKTOP UI</span><strong>Made to work<br />at every scale.</strong><small>Clean · adaptive · precise</small></div>
-              <span className="device-promo-chip device-promo-chip--desktop">Responsive build</span>
+              <PromoDevice type="macbook" theme="dark" />
+              <span className="device-promo-chip device-promo-chip--mode">◐ Dark interface</span>
+              <span className="device-promo-chip device-promo-chip--tour">Same UI · desktop</span>
             </div>
           </div>
           <div className="hero__support">
