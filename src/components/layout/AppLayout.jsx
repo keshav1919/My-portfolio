@@ -1,8 +1,9 @@
 import { ArrowUpRight, Github, Mail, Settings } from 'lucide-react';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { mainNavigation } from '../../data/navigation';
 import { profile } from '../../data/profile';
+import { LoadingScreen } from '../common/LoadingScreen';
 import { ScrollToTopButton } from '../common/ScrollToTopButton';
 import { Navbar } from './Navbar';
 
@@ -13,7 +14,7 @@ export function AppLayout() {
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <Navbar />
-      <main id="main-content" className="main-content"><div className="route-view" key={pathname}><Outlet /></div></main>
+      <main id="main-content" className="main-content"><div className="route-view" key={pathname}><Suspense fallback={<LoadingScreen />}><Outlet /></Suspense></div></main>
       <footer className="footer">
         <div className="container footer__inner">
           <div className="footer__brand"><Link to="/home">KESHAV<span>.</span></Link><p>Frontend Developer<br />Punjab, India</p></div>
