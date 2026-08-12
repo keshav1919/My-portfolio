@@ -15,5 +15,5 @@ export const profile = {
   portfolio: '',
   resumeUrl: '',
   profileImage: `${import.meta.env.BASE_URL}images/keshav-profile.jpg`,
-  brandLogo: `${import.meta.env.BASE_URL}images/keshav-coder-logo.png`
+  brandLogo: `${import.meta.env.BASE_URL}images/keshav-logo.png`
 };

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { mainNavigation } from '../../data/navigation';
+import { BrandMark } from '../common/BrandMark';
 
 export function Navbar() {
   const { theme, setPreference } = useTheme();
@@ -33,7 +34,7 @@ export function Navbar() {
   return (
     <header className={`topbar ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-menu-open' : ''}`}>
       <div className="container topbar__inner">
-        <NavLink className="brand" to="/home" aria-label="Keshav home">KESHAV<span>.</span></NavLink>
+        <NavLink className="brand" to="/home" aria-label="Keshav home"><BrandMark /></NavLink>
         <nav id="primary-navigation" className={`desktop-nav ${open ? 'is-open' : ''}`} aria-label="Primary navigation">
           <span className="mobile-menu-label">Navigation</span>
           {mainNavigation.map(({ label, path }) => <NavLink key={path} to={path}>{label}</NavLink>)}
