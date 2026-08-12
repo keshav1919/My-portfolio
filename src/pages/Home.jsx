@@ -1,6 +1,7 @@
 import { ArrowDownRight, ArrowUpRight, Check, Code2, Github, Mail, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AppButton } from '../components/common/AppButton';
+import { AnimatedStat } from '../components/common/AnimatedStat';
 import { PageContainer } from '../components/common/PageContainer';
 import { SectionTitle } from '../components/common/SectionTitle';
 import { SEO } from '../components/common/SEO';
@@ -85,7 +86,7 @@ export default function Home() {
         <div className="about-editorial__content"><p>{profile.bio}</p><dl><div><dt>Experience</dt><dd>{profile.experience}</dd></div><div><dt>Location</dt><dd>{profile.location}</dd></div><div><dt>Focus</dt><dd>Frontend Development</dd></div><div><dt>Education</dt><dd>{profile.education}</dd></div></dl><Link className="text-link" to="/about">More about me <ArrowUpRight /></Link></div>
       </section>
 
-      <section className="stats-band" aria-label="Portfolio facts"><div><strong>01+</strong><span>Year in web<br />development</span></div><div><strong>{String(projects.length).padStart(2, '0')}</strong><span>Portfolio<br />projects</span></div><div><strong>{profile.education}</strong><span>Current<br />education</span></div></section>
+      <section className="stats-band" aria-label="Portfolio facts"><AnimatedStat value={12} label={<>12th Grade<br />Completed</>} /><AnimatedStat value={projects.length} label={<>Portfolio<br />Projects</>} /><AnimatedStat value={1} suffix="+" label={<>Year in Web<br />Development</>} /></section>
 
       <section className="section-block" id="work">
         <div className="section-heading-row"><SectionTitle number="02" eyebrow="Selected work" title="Projects shaped around real interfaces." description="A collection of web experiences built to explore visual hierarchy, responsiveness and thoughtful interaction." /><Link className="text-link" to="/projects">Explore all work <ArrowUpRight /></Link></div>

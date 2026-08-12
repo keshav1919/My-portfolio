@@ -13,7 +13,7 @@ export function AppLayout() {
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <Navbar />
-      <main id="main-content" className="main-content"><Outlet /></main>
+      <main id="main-content" className="main-content"><div className="route-view" key={pathname}><Outlet /></div></main>
       <footer className="footer">
         <div className="container footer__inner">
           <div className="footer__brand"><Link to="/home">KESHAV<span>.</span></Link><p>Frontend Developer<br />Punjab, India</p></div>
