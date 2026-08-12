@@ -2,7 +2,7 @@
 export const profile = {
   name: 'Keshav',
   age: 19,
-  education: '12th Pass',
+  education: 'BCA 1st Year',
   experience: '1 Year Experience in Web Development',
   role: 'Frontend Web Developer',
   location: 'Punjab, India',

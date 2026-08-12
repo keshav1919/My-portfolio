@@ -90,7 +90,7 @@ export default function Home() {
         <div className="about-editorial__content"><p>{profile.bio}</p><dl><div><dt>Experience</dt><dd>{profile.experience}</dd></div><div><dt>Location</dt><dd>{profile.location}</dd></div><div><dt>Focus</dt><dd>Frontend Development</dd></div><div><dt>Education</dt><dd>{profile.education}</dd></div></dl><Link className="text-link" to="/about">More about me <ArrowUpRight /></Link></div>
       </section>
 
-      <section className="stats-band" aria-label="Portfolio facts"><AnimatedStat value={12} label={<>12th Grade<br />Completed</>} /><AnimatedStat value={projects.length} label={<>Portfolio<br />Projects</>} /><AnimatedStat value={1} suffix="+" label={<>Year in Web<br />Development</>} /></section>
+      <section className="stats-band" aria-label="Portfolio facts"><AnimatedStat value={1} label={<>BCA<br />First Year</>} /><AnimatedStat value={projects.length} label={<>Portfolio<br />Projects</>} /><AnimatedStat value={1} suffix="+" label={<>Year in Web<br />Development</>} /></section>
 
       <section className="section-block" id="work">
         <div className="section-heading-row"><SectionTitle number="02" eyebrow="Selected work" title="Projects shaped around real interfaces." description="A collection of web experiences built to explore visual hierarchy, responsiveness and thoughtful interaction." /><Link className="text-link" to="/projects">Explore all work <ArrowUpRight /></Link></div>
