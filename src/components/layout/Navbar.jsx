@@ -35,14 +35,6 @@ export function Navbar() {
     <header className={`topbar ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-menu-open' : ''}`}>
       <div className="container topbar__inner">
         <NavLink className="brand" to="/home" aria-label="Keshav home"><BrandMark /></NavLink>
-        <nav id="primary-navigation" className={`desktop-nav ${open ? 'is-open' : ''}`} aria-label="Primary navigation">
-          <span className="mobile-menu-label">Navigation</span>
-          {mainNavigation.map(({ label, path }) => <NavLink key={path} to={path}>{label}</NavLink>)}
-          <div className="mobile-menu-footer">
-            <NavLink to="/settings"><Settings aria-hidden="true" /> Settings</NavLink>
-            <a className="button" href="mailto:keshav8847426788@gmail.com">Let&apos;s talk <span aria-hidden="true">↗</span></a>
-          </div>
-        </nav>
         <div className="topbar__actions">
           <button className="theme-button" onClick={() => setPreference(theme === 'dark' ? 'light' : 'dark')} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
             {theme === 'dark' ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
@@ -51,6 +43,20 @@ export function Navbar() {
           <button className="menu-button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="primary-navigation" aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}>{open ? <X /> : <Menu />}</button>
         </div>
       </div>
+      <nav id="primary-navigation" className={`desktop-nav ${open ? 'is-open' : ''}`} aria-label="Primary navigation">
+        <span className="mobile-menu-label">Navigation</span>
+        {mainNavigation.map(({ label, path, icon: Icon }, index) => (
+          <NavLink key={path} to={path}>
+            <span className="desktop-nav__index">{String(index + 1).padStart(2, '0')}</span>
+            <span>{label}</span>
+            <Icon className="desktop-nav__mobile-icon" aria-hidden="true" />
+          </NavLink>
+        ))}
+        <div className="mobile-menu-footer">
+          <NavLink to="/settings"><Settings aria-hidden="true" /> Settings</NavLink>
+          <a className="button" href="mailto:keshav8847426788@gmail.com">Let&apos;s talk <span aria-hidden="true">↗</span></a>
+        </div>
+      </nav>
     </header>
   );
 }

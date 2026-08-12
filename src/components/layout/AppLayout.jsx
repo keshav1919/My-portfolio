@@ -6,6 +6,7 @@ import { profile } from '../../data/profile';
 import { BrandMark } from '../common/BrandMark';
 import { LoadingScreen } from '../common/LoadingScreen';
 import { ScrollToTopButton } from '../common/ScrollToTopButton';
+import { MobileBottomNav } from './MobileBottomNav';
 import { Navbar } from './Navbar';
 
 export function AppLayout() {
@@ -28,6 +29,7 @@ export function AppLayout() {
           <div className="footer__bottom"><span>&copy; {new Date().getFullYear()} Keshav. Built with React and care.</span><button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Back to top <ArrowUpRight /></button></div>
         </div>
       </footer>
+      <MobileBottomNav />
       <ScrollToTopButton />
     </>
   );
