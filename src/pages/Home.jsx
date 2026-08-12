@@ -25,6 +25,17 @@ const promoViews = [
   { name: 'System', className: 'system' }
 ];
 
+const promoSparks = [
+  { x: 9, y: 18, delay: -1.2, duration: 4.6 },
+  { x: 88, y: 15, delay: -3.1, duration: 5.4 },
+  { x: 76, y: 37, delay: -2.2, duration: 4.9 },
+  { x: 13, y: 48, delay: -.5, duration: 5.8 },
+  { x: 91, y: 62, delay: -4.2, duration: 6.1 },
+  { x: 18, y: 78, delay: -2.8, duration: 5.2 },
+  { x: 70, y: 84, delay: -1.7, duration: 4.7 },
+  { x: 45, y: 27, delay: -4.8, duration: 6.4 }
+];
+
 function PromoView({ view, index }) {
   if (view.className === 'exchange') {
     return (
@@ -65,6 +76,7 @@ function PromoDevice({ type, theme }) {
       <div className="promo-device__screen">
         <div className={`promo-app promo-app--${theme}`}>
           <header className="promo-app__header"><b>K/UX</b><span>Product preview</span><i className="promo-theme-indicator">{theme === 'light' ? '☼' : '◐'}</i></header>
+          <div className="promo-spark-field">{promoSparks.map((spark, index) => <i key={`${spark.x}-${spark.y}`} style={{ '--spark-x': `${spark.x}%`, '--spark-y': `${spark.y}%`, '--spark-delay': `${spark.delay}s`, '--spark-duration': `${spark.duration}s`, '--spark-index': index }} />)}</div>
           <div className="promo-app__tour">{promoViews.map((view, index) => <PromoView key={view.name} view={view} index={index} />)}</div>
           <footer className="promo-app__nav">{promoViews.map((view, index) => <span key={view.name} style={{ '--nav-index': index }}><i />{view.name}</span>)}</footer>
           <div className="promo-page-dots"><i /><i /><i /></div>
@@ -89,13 +101,11 @@ export default function Home() {
           <h1 id="hero-title"><span className="hero-line"><span>I build digital</span></span><span className="hero-line"><span>experiences that</span></span><span className="hero-line"><span><em>feel effortless.</em></span></span></h1>
           <div className="hero-device-showcase" aria-hidden="true">
             <div className="device-promo-scene device-promo-scene--iphone">
-              <div className="device-scene-orbits"><span /><span /><i /></div>
               <PromoDevice type="iphone" theme="light" />
               <span className="device-promo-chip device-promo-chip--mode">☼ Light interface</span>
               <span className="device-promo-chip device-promo-chip--tour">Code-built · 3 views</span>
             </div>
             <div className="device-promo-scene device-promo-scene--macbook">
-              <div className="device-scene-orbits"><span /><span /><i /></div>
               <PromoDevice type="macbook" theme="dark" />
               <span className="device-promo-chip device-promo-chip--mode">◐ Dark interface</span>
               <span className="device-promo-chip device-promo-chip--tour">Same UI · desktop</span>
