@@ -62,19 +62,23 @@ export function DashboardSidebar({ isOpen, onClose }) {
   return (
     <>
       {/* Mobile Backdrop — only visible below lg (1024px) */}
-      <div
-        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          onClick={() => onClose?.()}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            onClose?.();
+          }}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Sidebar Container */}
       <aside
         className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-kc-surface border-r border-kc-border flex flex-col justify-between transition-transform duration-300 ease-out ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0`}
+          isOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
+        } lg:translate-x-0 lg:pointer-events-auto`}
       >
         {/* Brand Header */}
         <div>
@@ -86,6 +90,11 @@ export function DashboardSidebar({ isOpen, onClose }) {
             <button
               type="button"
               onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClose?.();
+              }}
+              onTouchEnd={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onClose?.();
