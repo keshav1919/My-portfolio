@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './routes/AppRoutes';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
+import { AuthProvider } from './context/AuthContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { RouteProgress } from './components/common/RouteProgress';
 
@@ -13,7 +14,12 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <ToastProvider>
-          <BrowserRouter basename={basename}><RouteProgress /><AppRoutes /></BrowserRouter>
+          <AuthProvider>
+            <BrowserRouter basename={basename}>
+              <RouteProgress />
+              <AppRoutes />
+            </BrowserRouter>
+          </AuthProvider>
         </ToastProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -16,3 +16,5 @@ export async function copyText(value) {
   if (!copied) throw new Error('Copy failed');
   return true;
 }
+
+export const copyToClipboard = copyText;
