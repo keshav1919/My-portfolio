@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { BrandMark } from '../common/BrandMark';
 import {
@@ -29,12 +29,33 @@ const DASHBOARD_NAV = [
   { label: 'Favorites', path: '/dashboard/favorites', icon: Bookmark },
 ];
 
+/** Returns true when viewport is >= 1024px (Tailwind lg) */
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  return isDesktop;
+}
+
 export function DashboardSidebar({ isOpen, onClose }) {
   const { pathname } = useLocation();
+  const isDesktop = useIsDesktop();
+
+  const handleClose = useCallback(() => {
+    onClose?.();
+  }, [onClose]);
 
   // Auto-close on route change (mobile)
   useEffect(() => {
-    onClose?.();
+    if (!isDesktop) handleClose();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
@@ -42,68 +63,64 @@ export function DashboardSidebar({ isOpen, onClose }) {
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose?.();
+        handleClose();
       }
     };
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   // Prevent body scroll when mobile sidebar is open
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isDesktop) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
-  }, [isOpen]);
+  }, [isOpen, isDesktop]);
+
+  // On desktop, sidebar is always visible. On mobile, controlled by isOpen.
+  const sidebarVisible = isDesktop || isOpen;
 
   return (
     <>
-      {/* Mobile Backdrop — only visible below lg (1024px) */}
-      {isOpen && (
+      {/* Mobile Backdrop — only rendered when open on mobile */}
+      {!isDesktop && isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-          onClick={() => onClose?.()}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            onClose?.();
-          }}
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          onClick={handleClose}
           aria-hidden="true"
+          style={{ touchAction: 'none' }}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-kc-surface border-r border-kc-border flex flex-col justify-between transition-transform duration-300 ease-out ${
-          isOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
-        } lg:translate-x-0 lg:pointer-events-auto`}
+        className="fixed top-0 bottom-0 left-0 z-50 w-64 bg-kc-surface border-r border-kc-border flex flex-col justify-between"
+        style={{
+          transform: sidebarVisible ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 0.3s ease-out',
+          pointerEvents: sidebarVisible ? 'auto' : 'none',
+        }}
       >
         {/* Brand Header */}
         <div>
           <div className="p-4 sm:p-5 flex items-center justify-between border-b border-kc-border">
-            <Link to="/home" onClick={onClose} className="flex items-center gap-2">
+            <Link to="/home" onClick={handleClose} className="flex items-center gap-2">
               <BrandMark />
             </Link>
-            {/* X close button — only visible below lg */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onClose?.();
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onClose?.();
-              }}
-              className="lg:hidden w-8 h-8 rounded-xl bg-kc-surface-2 hover:bg-kc-border text-kc-muted hover:text-kc-text flex items-center justify-center transition-colors cursor-pointer"
-              aria-label="Close navigation"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            {/* X close button — only visible on mobile */}
+            {!isDesktop && (
+              <button
+                type="button"
+                onClick={handleClose}
+                className="w-8 h-8 rounded-xl bg-kc-surface-2 hover:bg-kc-border text-kc-muted hover:text-kc-text flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Close navigation"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           {/* Navigation Items */}
@@ -119,7 +136,7 @@ export function DashboardSidebar({ isOpen, onClose }) {
                   key={item.path}
                   to={item.path}
                   end={item.exact}
-                  onClick={onClose}
+                  onClick={handleClose}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                       isActive
@@ -141,7 +158,7 @@ export function DashboardSidebar({ isOpen, onClose }) {
               </div>
               <NavLink
                 to="/admin"
-                onClick={onClose}
+                onClick={handleClose}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                     isActive
@@ -161,7 +178,7 @@ export function DashboardSidebar({ isOpen, onClose }) {
         <div className="p-3 border-t border-kc-border space-y-1">
           <NavLink
             to="/profile"
-            onClick={onClose}
+            onClick={handleClose}
             className={({ isActive }) =>
               `flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                 isActive
@@ -178,7 +195,7 @@ export function DashboardSidebar({ isOpen, onClose }) {
 
           <Link
             to="/home"
-            onClick={onClose}
+            onClick={handleClose}
             className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-kc-muted hover:text-kc-text hover:bg-kc-surface-2/40 transition-colors"
           >
             <span>Visit Portfolio</span>
@@ -190,3 +207,5 @@ export function DashboardSidebar({ isOpen, onClose }) {
   );
 }
 export default DashboardSidebar;
+
+
