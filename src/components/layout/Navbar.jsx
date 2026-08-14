@@ -72,7 +72,7 @@ export function Navbar() {
   return (
     <header className={`topbar ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-menu-open' : ''} ${isHidden ? 'is-hidden' : ''}`}>
       <div className="topbar__inner">
-        <NavLink className="brand" to="/home" aria-label="Keshav home"><BrandMark /></NavLink>
+        <NavLink className="brand" to="/home" aria-label="Keshav home" onClick={() => { setOpen(false); setAvatarMenuOpen(false); }}><BrandMark /></NavLink>
 
         {/* Desktop Navigation Links */}
         <nav id="primary-navigation" className="desktop-nav" aria-label="Primary navigation">
@@ -105,6 +105,7 @@ export function Navbar() {
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
+                setOpen(false);
                 setAvatarMenuOpen((v) => !v);
               }}
               className="nav-avatar-btn"
@@ -126,7 +127,7 @@ export function Navbar() {
           {/* Mobile hamburger menu button */}
           <button
             className="menu-button hidden"
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => { setAvatarMenuOpen(false); setOpen((value) => !value); }}
             aria-expanded={open}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
           >

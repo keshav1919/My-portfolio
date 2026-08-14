@@ -156,7 +156,7 @@ html[data-theme="light"] .kc-input:focus {
 
 .kc-input-btn-right:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: var(--surface-2) !important;
 }
 
 .kc-input-btn-right svg {
@@ -407,7 +407,7 @@ html[data-theme="light"] .kc-btn-primary {
   animation: meta-shimmer 1.5s ease-in-out infinite;
 }
 
-.dark .skeleton-meta {
+html[data-theme="dark"] .skeleton-meta {
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.03) 25%,

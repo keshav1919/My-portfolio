@@ -12,8 +12,10 @@ const Home = lazy(() => import('../pages/Home'));
 const About = lazy(() => import('../pages/About'));
 const Skills = lazy(() => import('../pages/Skills'));
 const Projects = lazy(() => import('../pages/Projects'));
+const ProjectDispatcher = lazy(() => import('../pages/ProjectDispatcher'));
 const Experience = lazy(() => import('../pages/Experience'));
 const Contact = lazy(() => import('../pages/Contact'));
+const SavedPage = lazy(() => import('../pages/SavedPage'));
 const Settings = lazy(() => import('../pages/Settings'));
 
 // Auth Pages
@@ -59,8 +61,10 @@ export function AppRoutes() {
           <Route path="/about" element={<About />} />
           <Route path="/skills" element={<Skills />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:slug" element={<ProjectDispatcher />} />
           <Route path="/experience" element={<Experience />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/saved" element={<SavedPage />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
 

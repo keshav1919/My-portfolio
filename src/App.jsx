@@ -3,6 +3,7 @@ import { AppRoutes } from './routes/AppRoutes';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
+import { SavedProvider } from './context/SavedContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { RouteProgress } from './components/common/RouteProgress';
 
@@ -15,10 +16,12 @@ export default function App() {
       <ThemeProvider>
         <ToastProvider>
           <AuthProvider>
-            <BrowserRouter basename={basename}>
-              <RouteProgress />
-              <AppRoutes />
-            </BrowserRouter>
+            <SavedProvider>
+              <BrowserRouter basename={basename}>
+                <RouteProgress />
+                <AppRoutes />
+              </BrowserRouter>
+            </SavedProvider>
           </AuthProvider>
         </ToastProvider>
       </ThemeProvider>

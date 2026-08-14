@@ -41,7 +41,7 @@ export function DashboardLayout() {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-kc-bg text-kc-text flex selection:bg-kc-accent-surface selection:text-[#090909] overflow-x-hidden">
+    <div className="min-h-screen bg-kc-bg text-kc-text flex selection:bg-kc-accent-surface selection:text-[#090909]">
       {/* Responsive Off-Canvas Sidebar */}
       <DashboardSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

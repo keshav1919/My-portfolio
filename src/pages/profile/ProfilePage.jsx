@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
+import { useSaved } from '../../context/SavedContext';
 import { Avatar } from '../../components/ui/Avatar';
 import { AvatarPicker } from '../../components/ui/AvatarPicker';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
+import { SEO } from '../../components/common/SEO';
+import { ToolCard } from '../../components/dashboard/ToolCard';
+import { CommandCard } from '../../components/dashboard/CommandCard';
+import { ShortcutRow } from '../../components/dashboard/ShortcutRow';
+import { ResourceCard } from '../../components/dashboard/ResourceCard';
 import {
   User,
   Mail,
@@ -14,7 +21,6 @@ import {
   Linkedin,
   Globe,
   Calendar,
-  Clock,
   Sparkles,
   LogOut,
   Edit3,
@@ -23,14 +29,26 @@ import {
   Plus,
   Shield,
   ArrowLeft,
-  LayoutDashboard
+  Bookmark,
+  Contrast,
+  Layers,
+  Award,
+  KeyRound,
+  Terminal,
+  Keyboard,
+  Wrench,
+  BookOpen
 } from 'lucide-react';
 
 export function ProfilePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, profile, updateProfileData, logout, isAdmin } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
+  const { savedItems, toggleSave } = useSaved();
 
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'overview'); // 'overview' | 'saved' | 'appearance' | 'account'
   const [isEditing, setIsEditing] = useState(false);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -53,7 +71,7 @@ export function ProfilePage() {
   useEffect(() => {
     if (profile) {
       setFormData({
-        name: profile.name || user?.displayName || '',
+        name: profile.name || user?.displayName || 'Developer',
         avatarId: profile.avatarId || 'avatar-01',
         primaryRole: profile.primaryRole || 'Frontend Developer',
         location: profile.location || 'Punjab, India',
@@ -117,428 +135,528 @@ export function ProfilePage() {
     }
   };
 
-  // Helper formatting dates
   const formatDate = (timestamp) => {
-    if (!timestamp) return 'Recent';
+    if (!timestamp) return 'Member since 2026';
     if (timestamp.toDate) {
       return timestamp.toDate().toLocaleDateString('en-US', {
-        day: 'numeric',
         month: 'short',
         year: 'numeric',
       });
     }
     return new Date(timestamp).toLocaleDateString('en-US', {
-      day: 'numeric',
       month: 'short',
       year: 'numeric',
     });
   };
 
-  return (
-    <div className="min-h-screen bg-kc-bg text-kc-text pb-24">
-      {/* Top Header */}
-      <header className="border-b border-kc-border bg-kc-surface/60 backdrop-blur-md sticky top-0 z-40">
-        <div className="app-container py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link
-              to="/dashboard"
-              className="p-2 rounded-xl text-kc-muted hover:text-kc-text hover:bg-kc-surface-2 transition-colors"
-              aria-label="Back to Dashboard"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div>
-              <h1 className="text-lg font-bold text-kc-text m-0">Developer Profile</h1>
-              <p className="text-xs text-kc-muted m-0">Manage your identity and workspace settings</p>
-            </div>
-          </div>
+  const username = user?.email ? user.email.split('@')[0] : 'developer';
 
-          <div className="flex items-center gap-3">
-            <Link to="/dashboard" className="kc-btn-secondary text-xs h-9 px-3">
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span>Dashboard</span>
+  return (
+    <div className="min-h-screen bg-kc-bg text-kc-text pb-20">
+      <SEO title="User Profile — Account & Settings" description="Manage your developer profile, account details, and saved items." path="/profile" />
+
+      {/* ─── GitHub-style Top Header Bar ─── */}
+      <header className="border-b border-kc-border bg-kc-surface/70 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <Link
+            to="/home"
+            className="inline-flex items-center gap-2 text-xs font-bold text-kc-muted hover:text-kc-text transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Portfolio</span>
+          </Link>
+
+          <div className="flex items-center gap-2">
+            <Link
+              to="/projects/devhub"
+              className="px-3 py-1.5 rounded-xl border border-kc-border text-xs font-semibold text-kc-muted hover:text-kc-text hover:bg-kc-surface-2 transition-colors flex items-center gap-1.5"
+            >
+              <Wrench className="w-3.5 h-3.5 text-kc-accent" />
+              <span>DevHub</span>
             </Link>
-            {isAdmin && (
-              <Link to="/admin" className="kc-btn-secondary text-xs h-9 px-3 border-kc-accent/40 text-kc-accent">
-                <Shield className="w-3.5 h-3.5" />
-                <span>Admin Panel</span>
-              </Link>
-            )}
+
+            <button
+              onClick={() => setShowLogoutConfirm(true)}
+              className="px-3 py-1.5 rounded-xl border border-kc-border text-xs font-semibold text-kc-muted hover:text-kc-danger hover:bg-kc-danger/10 transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign out</span>
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Main Profile Content */}
-      <main className="app-container max-w-4xl py-8 space-y-8 animate-fade-in">
-        {/* Profile Card Header */}
-        <div className="kc-card p-6 sm:p-8 relative overflow-hidden bg-gradient-to-b from-kc-surface to-kc-surface/90">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-kc-border">
-            <div className="flex items-center gap-5">
-              <div className="relative group">
-                <Avatar avatarId={formData.avatarId} size={84} className="ring-4 ring-kc-border shadow-kc-md" />
-                <button
-                  type="button"
-                  onClick={() => setShowAvatarPicker((prev) => !prev)}
-                  className="absolute -bottom-1 -right-1 bg-kc-surface border border-kc-border text-kc-accent p-1.5 rounded-full shadow hover:bg-kc-surface-2 transition-transform hover:scale-110 cursor-pointer"
-                  title="Change Avatar"
-                  aria-label="Change Avatar"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                </button>
+      {/* ─── Main GitHub-Inspired 2-Column Grid ─── */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* ─── LEFT COLUMN: User Identity Sidebar (~300px) ─── */}
+          <aside className="lg:col-span-4 space-y-6">
+            <div className="space-y-4">
+              {/* Avatar with change button */}
+              <div className="relative inline-block group">
+                <div className="ring-2 ring-kc-border rounded-full p-1 bg-kc-surface">
+                  <Avatar avatarId={formData.avatarId} size={160} />
+                </div>
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAvatarPicker(true)}
+                    className="absolute bottom-2 right-2 p-2.5 rounded-full bg-kc-text text-kc-bg hover:opacity-90 shadow-lg transition-transform hover:scale-105 cursor-pointer"
+                    title="Change Avatar"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                  </button>
+                )}
               </div>
 
+              {/* User Names & Badges */}
               <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h2 className="text-2xl font-extrabold text-kc-text m-0">{formData.name || 'Developer'}</h2>
-                  {isAdmin && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-kc-accent/15 text-kc-accent text-xs font-bold border border-kc-accent/30">
-                      ADMIN
-                    </span>
-                  )}
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
-                    Active
-                  </span>
-                </div>
-                <p className="text-sm text-kc-muted mt-1 flex items-center gap-2">
-                  <Briefcase className="w-3.5 h-3.5" />
-                  <span>{formData.primaryRole}</span>
-                  <span>•</span>
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>{formData.location}</span>
+                <h1 className="text-2xl font-extrabold text-kc-text tracking-tight m-0 leading-tight">
+                  {formData.name || 'Developer'}
+                </h1>
+                <p className="text-sm text-kc-muted font-normal m-0 mt-0.5">
+                  @{username}
                 </p>
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              {!isEditing ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(true)}
-                  className="kc-btn-primary text-sm h-10 px-4 w-full sm:w-auto cursor-pointer"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  <span>Edit Profile</span>
-                </button>
-              ) : (
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditing(false);
-                      setShowAvatarPicker(false);
-                    }}
-                    disabled={saving}
-                    className="kc-btn-secondary text-sm h-10 px-4 flex-1 sm:flex-initial cursor-pointer"
-                  >
-                    <X className="w-4 h-4" />
-                    <span>Cancel</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="kc-btn-primary text-sm h-10 px-5 flex-1 sm:flex-initial cursor-pointer"
-                  >
-                    <Check className="w-4 h-4" />
-                    <span>{saving ? 'Saving...' : 'Save'}</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Avatar Picker Drawer */}
-          {showAvatarPicker && (
-            <div className="mt-6 p-4 rounded-2xl bg-kc-surface-2/60 border border-kc-border animate-slide-up">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-kc-muted">Choose your Avatar</span>
-                <button
-                  type="button"
-                  onClick={() => setShowAvatarPicker(false)}
-                  className="text-xs text-kc-muted hover:text-kc-text cursor-pointer"
-                >
-                  Close
-                </button>
+              {/* Role & Status Pill */}
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-kc-accent/15 text-kc-accent border border-kc-accent/30 uppercase tracking-wider">
+                  PRO MEMBER
+                </span>
+                {isAdmin && (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-500/15 text-purple-400 border border-purple-500/30 uppercase tracking-wider flex items-center gap-1">
+                    <Shield className="w-3 h-3" />
+                    ADMIN
+                  </span>
+                )}
               </div>
-              <AvatarPicker
-                selectedId={formData.avatarId}
-                onSelect={(id) => {
-                  setFormData((prev) => ({ ...prev, avatarId: id }));
-                  if (!isEditing) {
-                    // Instant save if outside full edit mode
-                    updateProfileData({ avatarId: id });
-                    toast.success('Avatar updated');
-                    setShowAvatarPicker(false);
-                  }
-                }}
-              />
-            </div>
-          )}
 
-          {/* Bio Section */}
-          <div className="pt-6">
-            <label className="block text-xs font-bold uppercase tracking-wider text-kc-muted mb-2">About & Bio</label>
-            {isEditing ? (
-              <textarea
-                name="bio"
-                rows={3}
-                value={formData.bio}
-                onChange={handleChange}
-                placeholder="Tell other developers about your journey and frontend focus..."
-                className="kc-input h-auto py-3 resize-none"
-              />
-            ) : (
-              <p className="text-sm text-kc-text/90 leading-relaxed max-w-2xl">
-                {formData.bio || 'No bio specified yet.'}
+              {/* Bio */}
+              <p className="text-xs sm:text-sm text-kc-muted leading-relaxed m-0 pt-1">
+                {formData.bio}
               </p>
-            )}
-          </div>
-        </div>
 
-        {/* Detailed Information & Skills */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Identity & Contact Details */}
-          <div className="kc-card p-6 space-y-4">
-            <h3 className="text-base font-bold text-kc-text flex items-center gap-2 pb-3 border-b border-kc-border">
-              <User className="w-4 h-4 text-kc-accent" />
-              <span>Details & Links</span>
-            </h3>
+              {/* Edit Profile Action Button */}
+              <button
+                type="button"
+                onClick={() => setIsEditing(!isEditing)}
+                className={`w-full py-2 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer border ${
+                  isEditing
+                    ? 'bg-kc-surface-2 border-kc-border text-kc-text'
+                    : 'bg-kc-surface border-kc-border text-kc-text hover:bg-kc-surface-2 hover:border-kc-border-hover shadow-sm'
+                }`}
+              >
+                <Edit3 className="w-3.5 h-3.5 text-kc-accent" />
+                <span>{isEditing ? 'Cancel Editing' : 'Edit profile'}</span>
+              </button>
 
-            {/* Full Name */}
-            <div>
-              <label className="block text-xs font-semibold text-kc-muted mb-1">Full Name</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="kc-input text-sm"
-                />
-              ) : (
-                <p className="text-sm font-semibold text-kc-text">{formData.name}</p>
-              )}
-            </div>
-
-            {/* Email (Read-only) */}
-            <div>
-              <label className="block text-xs font-semibold text-kc-muted mb-1">Email Address</label>
-              <div className="flex items-center gap-2 text-sm text-kc-muted bg-kc-surface-2 px-3 py-2 rounded-xl border border-kc-border">
-                <Mail className="w-4 h-4 shrink-0" />
-                <span className="truncate">{user?.email || profile?.email}</span>
-                <span className="ml-auto text-[11px] font-bold text-emerald-400">Verified</span>
-              </div>
-            </div>
-
-            {/* Primary Role */}
-            <div>
-              <label className="block text-xs font-semibold text-kc-muted mb-1">Primary Role</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="primaryRole"
-                  value={formData.primaryRole}
-                  onChange={handleChange}
-                  placeholder="e.g. Frontend Web Developer"
-                  className="kc-input text-sm"
-                />
-              ) : (
-                <p className="text-sm text-kc-text">{formData.primaryRole}</p>
-              )}
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className="block text-xs font-semibold text-kc-muted mb-1">Location</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  placeholder="City, Country"
-                  className="kc-input text-sm"
-                />
-              ) : (
-                <p className="text-sm text-kc-text">{formData.location}</p>
-              )}
-            </div>
-
-            {/* Experience */}
-            <div>
-              <label className="block text-xs font-semibold text-kc-muted mb-1">Experience</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="experience"
-                  value={formData.experience}
-                  onChange={handleChange}
-                  placeholder="e.g. 1 Year in React"
-                  className="kc-input text-sm"
-                />
-              ) : (
-                <p className="text-sm text-kc-text">{formData.experience}</p>
-              )}
-            </div>
-
-            {/* Social Links */}
-            <div className="pt-2 space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-kc-muted mb-1">GitHub URL</label>
-                {isEditing ? (
-                  <div className="relative">
-                    <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kc-muted" />
-                    <input
-                      type="url"
-                      name="github"
-                      value={formData.github}
-                      onChange={handleChange}
-                      placeholder="https://github.com/username"
-                      className="kc-input pl-9 text-sm"
-                    />
+              {/* Metadata Details List */}
+              <div className="space-y-2.5 pt-3 border-t border-kc-border text-xs text-kc-muted">
+                <div className="flex items-center gap-2.5">
+                  <Briefcase className="w-4 h-4 text-kc-muted shrink-0" />
+                  <span className="truncate">{formData.primaryRole}</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <MapPin className="w-4 h-4 text-kc-muted shrink-0" />
+                  <span className="truncate">{formData.location}</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-kc-muted shrink-0" />
+                  <span className="truncate">{user?.email}</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Calendar className="w-4 h-4 text-kc-muted shrink-0" />
+                  <span>{formatDate(profile?.createdAt)}</span>
+                </div>
+                {formData.github && (
+                  <div className="flex items-center gap-2.5">
+                    <Github className="w-4 h-4 text-kc-muted shrink-0" />
+                    <a href={formData.github} target="_blank" rel="noopener noreferrer" className="hover:text-kc-accent transition-colors truncate">
+                      {formData.github.replace(/^https?:\/\//, '')}
+                    </a>
                   </div>
-                ) : formData.github ? (
-                  <a
-                    href={formData.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs text-kc-accent hover:underline flex items-center gap-1.5"
-                  >
-                    <Github className="w-3.5 h-3.5" /> {formData.github}
-                  </a>
-                ) : (
-                  <span className="text-xs text-kc-muted">Not specified</span>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-kc-muted mb-1">LinkedIn URL</label>
-                {isEditing ? (
-                  <div className="relative">
-                    <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kc-muted" />
-                    <input
-                      type="url"
-                      name="linkedin"
-                      value={formData.linkedin}
-                      onChange={handleChange}
-                      placeholder="https://linkedin.com/in/username"
-                      className="kc-input pl-9 text-sm"
-                    />
-                  </div>
-                ) : formData.linkedin ? (
-                  <a
-                    href={formData.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs text-kc-accent hover:underline flex items-center gap-1.5"
-                  >
-                    <Linkedin className="w-3.5 h-3.5" /> {formData.linkedin}
-                  </a>
-                ) : (
-                  <span className="text-xs text-kc-muted">Not specified</span>
                 )}
               </div>
             </div>
-          </div>
+          </aside>
 
-          {/* Technical Skills & Activity Stats */}
-          <div className="kc-card p-6 space-y-6 flex flex-col justify-between">
-            <div>
-              <h3 className="text-base font-bold text-kc-text flex items-center gap-2 pb-3 border-b border-kc-border">
-                <Sparkles className="w-4 h-4 text-kc-accent" />
-                <span>Skills & Tech Stack</span>
-              </h3>
+          {/* ─── RIGHT COLUMN: GitHub-style Tabs & Content ─── */}
+          <section className="lg:col-span-8 space-y-6">
+            {/* Tab Navigation */}
+            <div className="flex items-center gap-1 border-b border-kc-border pb-1 overflow-x-auto scrollbar-none">
+              {[
+                { id: 'overview', label: 'Overview', icon: Layers },
+                { id: 'saved', label: 'Saved Items', icon: Bookmark, count: savedItems.length },
+                { id: 'appearance', label: 'Appearance', icon: Contrast },
+                { id: 'account', label: 'Account & Security', icon: Shield },
+              ].map(({ id, label, icon: Icon, count }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  className={`px-4 py-2.5 text-xs font-bold rounded-xl transition-colors flex items-center gap-2 cursor-pointer border ${
+                    activeTab === id
+                      ? 'bg-kc-accent-surface text-[#090909] border-kc-accent-surface'
+                      : 'bg-transparent border-transparent text-kc-muted hover:text-kc-text hover:bg-kc-surface'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{label}</span>
+                  {count !== undefined && count > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-black/20 text-inherit font-bold">
+                      {count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
 
-              <div className="flex flex-wrap gap-2 py-4">
-                {formData.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-kc-surface-2 border border-kc-border text-xs font-semibold text-kc-text"
-                  >
-                    <span>{skill}</span>
-                    {isEditing && (
+            {/* ─── TAB 1: OVERVIEW ─── */}
+            {activeTab === 'overview' && (
+              <div className="space-y-6 animate-fade-in">
+                {/* Stats Summary Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-4 rounded-2xl border border-kc-border bg-kc-surface">
+                    <span className="text-[11px] font-bold text-kc-muted uppercase tracking-wider block mb-1">
+                      Saved Bookmarks
+                    </span>
+                    <div className="flex items-baseline gap-2">
+                      <strong className="text-2xl font-black text-kc-accent font-mono">
+                        {savedItems.length}
+                      </strong>
+                      <span className="text-xs text-kc-muted">items</span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl border border-kc-border bg-kc-surface">
+                    <span className="text-[11px] font-bold text-kc-muted uppercase tracking-wider block mb-1">
+                      Experience
+                    </span>
+                    <div className="flex items-baseline gap-2">
+                      <strong className="text-2xl font-black text-kc-text font-mono">
+                        {formData.experience || '1 Year'}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl border border-kc-border bg-kc-surface">
+                    <span className="text-[11px] font-bold text-kc-muted uppercase tracking-wider block mb-1">
+                      Account Status
+                    </span>
+                    <div className="flex items-center gap-1.5 pt-1">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                      <strong className="text-sm font-bold text-emerald-400">
+                        Active & Verified
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Skills & Technologies Card */}
+                <div className="p-6 rounded-2xl border border-kc-border bg-kc-surface">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-bold text-kc-text m-0 flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-kc-accent" />
+                      <span>Technical Skills & Focus</span>
+                    </h3>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {formData.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-3 py-1 rounded-xl text-xs font-semibold bg-kc-surface-2 border border-kc-border text-kc-text inline-flex items-center gap-1.5"
+                      >
+                        <span>{skill}</span>
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSkill(skill)}
+                            className="text-kc-muted hover:text-kc-danger transition-colors cursor-pointer ml-1"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+
+                  {isEditing && (
+                    <form onSubmit={handleAddSkill} className="flex gap-2 mt-4 max-w-sm">
+                      <input
+                        type="text"
+                        placeholder="Add new skill (e.g. Next.js)..."
+                        value={skillInput}
+                        onChange={(e) => setSkillInput(e.target.value)}
+                        className="flex-1 px-3 py-1.5 rounded-xl bg-kc-surface-2 border border-kc-border text-xs text-kc-text placeholder:text-kc-muted outline-none focus:border-kc-accent"
+                      />
+                      <button
+                        type="submit"
+                        className="px-3 py-1.5 rounded-xl bg-kc-text text-kc-bg text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        Add
+                      </button>
+                    </form>
+                  )}
+                </div>
+
+                {/* Edit Form Panel (visible when editing) */}
+                {isEditing && (
+                  <form onSubmit={handleSave} className="p-6 rounded-2xl border border-kc-accent/30 bg-kc-surface space-y-4 animate-fade-in">
+                    <h3 className="text-sm font-bold text-kc-text m-0 flex items-center gap-2 text-kc-accent">
+                      <Edit3 className="w-4 h-4" />
+                      <span>Edit Account Profile</span>
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-kc-muted block mb-1">Display Name</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 rounded-xl bg-kc-surface-2 border border-kc-border text-xs text-kc-text outline-none focus:border-kc-accent"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-kc-muted block mb-1">Primary Role</label>
+                        <input
+                          type="text"
+                          name="primaryRole"
+                          value={formData.primaryRole}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 rounded-xl bg-kc-surface-2 border border-kc-border text-xs text-kc-text outline-none focus:border-kc-accent"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-kc-muted block mb-1">Location</label>
+                        <input
+                          type="text"
+                          name="location"
+                          value={formData.location}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 rounded-xl bg-kc-surface-2 border border-kc-border text-xs text-kc-text outline-none focus:border-kc-accent"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-kc-muted block mb-1">GitHub Profile URL</label>
+                        <input
+                          type="url"
+                          name="github"
+                          value={formData.github}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 rounded-xl bg-kc-surface-2 border border-kc-border text-xs text-kc-text outline-none focus:border-kc-accent"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold uppercase text-kc-muted block mb-1">Short Bio</label>
+                      <textarea
+                        name="bio"
+                        rows="3"
+                        value={formData.bio}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 rounded-xl bg-kc-surface-2 border border-kc-border text-xs text-kc-text outline-none focus:border-kc-accent"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-kc-border">
                       <button
                         type="button"
-                        onClick={() => handleRemoveSkill(skill)}
-                        className="text-kc-muted hover:text-kc-danger transition-colors cursor-pointer"
-                        aria-label={`Remove ${skill}`}
+                        onClick={() => setIsEditing(false)}
+                        className="px-4 py-2 rounded-xl border border-kc-border text-xs font-bold text-kc-muted hover:bg-kc-surface-2 transition-colors cursor-pointer"
                       >
-                        <X className="w-3 h-3" />
+                        Cancel
                       </button>
-                    )}
-                  </span>
-                ))}
+                      <button
+                        type="submit"
+                        disabled={saving}
+                        className="px-5 py-2 rounded-xl bg-kc-accent text-[#090909] text-xs font-bold hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                      >
+                        {saving ? <span>Saving...</span> : <><span>Save changes</span><Check className="w-3.5 h-3.5" /></>}
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
+            )}
 
-              {isEditing && (
-                <div className="flex gap-2 mt-2">
-                  <input
-                    type="text"
-                    placeholder="Add a new skill (e.g. Next.js)..."
-                    value={skillInput}
-                    onChange={(e) => setSkillInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAddSkill(e)}
-                    className="kc-input text-xs h-9"
-                  />
+            {/* ─── TAB 2: SAVED ITEMS ─── */}
+            {activeTab === 'saved' && (
+              <div className="space-y-4 animate-fade-in">
+                {savedItems.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {savedItems.map((fav) => {
+                      const item = fav.itemData || fav;
+                      const id = String(fav.id || '');
+                      if (id.startsWith('cmd-')) {
+                        return (
+                          <CommandCard
+                            key={fav.id}
+                            command={item}
+                            isFavorite={true}
+                            onToggleFavorite={() => toggleSave(item)}
+                          />
+                        );
+                      }
+                      if (id.startsWith('sc-')) {
+                        return (
+                          <div key={fav.id} className="sm:col-span-2">
+                            <ShortcutRow
+                              shortcut={item}
+                              isFavorite={true}
+                              onToggleFavorite={() => toggleSave(item)}
+                            />
+                          </div>
+                        );
+                      }
+                      if (id.startsWith('res-')) {
+                        return (
+                          <ResourceCard
+                            key={fav.id}
+                            resource={item}
+                            isFavorite={true}
+                            onToggleFavorite={() => toggleSave(item)}
+                          />
+                        );
+                      }
+                      return (
+                        <ToolCard
+                          key={fav.id}
+                          tool={item}
+                          isFavorite={true}
+                          onToggleFavorite={() => toggleSave(item)}
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="py-16 text-center border border-kc-border rounded-2xl bg-kc-surface">
+                    <Bookmark className="w-8 h-8 opacity-40 mx-auto mb-3 text-kc-muted" />
+                    <h4 className="text-sm font-bold text-kc-text mb-1">No saved items yet</h4>
+                    <p className="text-xs text-kc-muted mb-4">Bookmark any tool or resource from DevHub to pin it here.</p>
+                    <Link
+                      to="/projects/devhub"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-kc-accent hover:underline"
+                    >
+                      <span>Open DevHub</span>
+                      <ArrowLeft className="w-3 h-3 rotate-180" />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ─── TAB 3: APPEARANCE ─── */}
+            {activeTab === 'appearance' && (
+              <div className="p-6 rounded-2xl border border-kc-border bg-kc-surface space-y-6 animate-fade-in">
+                <div>
+                  <h3 className="text-sm font-bold text-kc-text m-0 mb-1">Theme Preferences</h3>
+                  <p className="text-xs text-kc-muted m-0">Choose how KeshavCoder looks to you. Select a theme preference.</p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <button
-                    type="button"
-                    onClick={handleAddSkill}
-                    className="kc-btn-secondary text-xs h-9 px-3 shrink-0 cursor-pointer"
+                    onClick={() => { if (theme !== 'dark') toggleTheme(); }}
+                    className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                      theme === 'dark'
+                        ? 'border-kc-accent bg-kc-accent/5 ring-1 ring-kc-accent'
+                        : 'border-kc-border bg-kc-surface-2 hover:border-kc-border-hover'
+                    }`}
                   >
-                    <Plus className="w-3.5 h-3.5" /> Add
+                    <div className="w-8 h-8 rounded-xl bg-black border border-zinc-800 flex items-center justify-center mb-3 text-white">
+                      <Contrast className="w-4 h-4" />
+                    </div>
+                    <strong className="text-xs font-bold text-kc-text block mb-0.5">Dark Mode</strong>
+                    <span className="text-[11px] text-kc-muted">High-contrast dark terminal theme.</span>
+                  </button>
+
+                  <button
+                    onClick={() => { if (theme !== 'light') toggleTheme(); }}
+                    className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                      theme === 'light'
+                        ? 'border-kc-accent bg-kc-accent/5 ring-1 ring-kc-accent'
+                        : 'border-kc-border bg-kc-surface-2 hover:border-kc-border-hover'
+                    }`}
+                  >
+                    <div className="w-8 h-8 rounded-xl bg-white border border-zinc-200 flex items-center justify-center mb-3 text-zinc-900">
+                      <Contrast className="w-4 h-4" />
+                    </div>
+                    <strong className="text-xs font-bold text-kc-text block mb-0.5">Light Mode</strong>
+                    <span className="text-[11px] text-kc-muted">Clean, high-legibility light theme.</span>
                   </button>
                 </div>
-              )}
-            </div>
-
-            {/* Account Metadata */}
-            <div className="pt-4 border-t border-kc-border space-y-2 text-xs text-kc-muted">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" /> Joined Date:
-                </span>
-                <span className="text-kc-text font-semibold">{formatDate(profile?.createdAt)}</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" /> Last Active:
-                </span>
-                <span className="text-kc-text font-semibold">{formatDate(profile?.lastLoginAt)}</span>
+            )}
+
+            {/* ─── TAB 4: ACCOUNT & SECURITY ─── */}
+            {activeTab === 'account' && (
+              <div className="p-6 rounded-2xl border border-kc-border bg-kc-surface space-y-6 animate-fade-in">
+                <div>
+                  <h3 className="text-sm font-bold text-kc-text m-0 mb-1">Account Credentials</h3>
+                  <p className="text-xs text-kc-muted m-0">Your authentication session and account protection details.</p>
+                </div>
+
+                <div className="space-y-3 text-xs">
+                  <div className="flex items-center justify-between py-2.5 border-b border-kc-border">
+                    <span className="text-kc-muted">Email Address</span>
+                    <strong className="text-kc-text font-mono">{user?.email}</strong>
+                  </div>
+                  <div className="flex items-center justify-between py-2.5 border-b border-kc-border">
+                    <span className="text-kc-muted">User ID</span>
+                    <strong className="text-kc-text font-mono text-[11px]">{user?.uid}</strong>
+                  </div>
+                  <div className="flex items-center justify-between py-2.5 border-b border-kc-border">
+                    <span className="text-kc-muted">Two-Factor Authentication (OTP)</span>
+                    <span className="text-emerald-400 font-bold">Enabled & Verified</span>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    onClick={() => setShowLogoutConfirm(true)}
+                    className="px-4 py-2 rounded-xl bg-kc-danger/10 text-kc-danger hover:bg-kc-danger/20 font-bold text-xs transition-colors cursor-pointer flex items-center gap-2"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign out of session</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* EXCLUSIVE LOGOUT SECTION (UX RULE #24) */}
-        <div className="pt-8 border-t border-kc-border/80 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-2xl bg-kc-surface/40 border border-kc-border">
-          <div>
-            <h4 className="text-sm font-bold text-kc-text m-0">Account Session</h4>
-            <p className="text-xs text-kc-muted mt-0.5">End your current session across this browser.</p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setShowLogoutConfirm(true)}
-            className="kc-btn-danger text-sm px-6 h-11 w-full sm:w-auto cursor-pointer"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sign out of KeshavCoder</span>
-          </button>
+            )}
+          </section>
         </div>
       </main>
 
+      {/* Avatar Picker Modal */}
+      {showAvatarPicker && (
+        <AvatarPicker
+          selectedId={formData.avatarId}
+          onSelect={(avatarId) => {
+            setFormData((prev) => ({ ...prev, avatarId }));
+            setShowAvatarPicker(false);
+          }}
+          onClose={() => setShowAvatarPicker(false)}
+        />
+      )}
+
       {/* Logout Confirmation Dialog */}
-      <ConfirmDialog
-        isOpen={showLogoutConfirm}
-        title="Sign Out of KeshavCoder"
-        message="Are you sure you want to sign out of your KeshavCoder workspace?"
-        confirmText="Yes, Sign Out"
-        isDanger={true}
-        onConfirm={handleLogout}
-        onCancel={() => setShowLogoutConfirm(false)}
-      />
+      {showLogoutConfirm && (
+        <ConfirmDialog
+          title="Sign out of account?"
+          message="Are you sure you want to sign out? Your saved items and roadmap milestones are safely stored in your account."
+          confirmText="Yes, Sign Out"
+          cancelText="Cancel"
+          danger={true}
+          onConfirm={handleLogout}
+          onCancel={() => setShowLogoutConfirm(false)}
+        />
+      )}
     </div>
   );
 }
+
 export default ProfilePage;

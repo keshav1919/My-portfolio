@@ -104,37 +104,91 @@ export async function updateLastLogin(uid) {
  * User Favorites Subcollection: users/{uid}/favorites/{itemId}
  * -------------------------------------------------------------
  */
+const cleanDataForFirestore = (obj) => {
+  if (!obj || typeof obj !== 'object') return obj;
+  return JSON.parse(
+    JSON.stringify(obj, (_, v) => (v === undefined ? null : v))
+  );
+};
+
 export async function getUserFavorites(uid) {
+  if (!uid) return [];
+  const localKey = `kc_user_favorites_${uid}`;
   try {
     const favRef = collection(db, 'users', uid, 'favorites');
     const snap = await getDocs(favRef);
     const favorites = [];
-    snap.forEach((docSnap) => favorites.push(docSnap.data()));
+    snap.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data && data.id) favorites.push(data);
+    });
+    // Cache valid remote data
+    try {
+      localStorage.setItem(localKey, JSON.stringify(favorites));
+    } catch {}
     return favorites;
   } catch (error) {
-    console.warn('[getUserFavorites]', error.message);
-    return [];
+    console.warn('[getUserFavorites] Firestore error, falling back to local user cache:', error.message);
+    try {
+      const cached = localStorage.getItem(localKey);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
   }
 }
 
 export async function toggleUserFavorite(uid, item) {
   if (!uid || !item || !item.id) return false;
+  const localKey = `kc_user_favorites_${uid}`;
   const docRef = doc(db, 'users', uid, 'favorites', item.id);
   const snap = await getDoc(docRef);
 
   if (snap.exists()) {
     await deleteDoc(docRef);
+    // Update local cache
+    try {
+      const cached = JSON.parse(localStorage.getItem(localKey) || '[]');
+      const updated = cached.filter((f) => f.id !== item.id);
+      localStorage.setItem(localKey, JSON.stringify(updated));
+    } catch {}
     return false; // Removed
   } else {
-    await setDoc(docRef, {
+    const cleanItem = cleanDataForFirestore(item);
+    const payload = {
       id: item.id,
       title: item.title || item.name || '',
       category: item.category || '',
       type: item.type || 'tool',
-      itemData: item,
+      itemData: cleanItem,
       savedAt: serverTimestamp(),
-    });
+    };
+    await setDoc(docRef, payload);
+    // Update local cache
+    try {
+      const cached = JSON.parse(localStorage.getItem(localKey) || '[]');
+      cached.push({ ...payload, savedAt: new Date().toISOString() });
+      localStorage.setItem(localKey, JSON.stringify(cached));
+    } catch {}
     return true; // Added
+  }
+}
+
+export async function removeUserFavorite(uid, itemId) {
+  if (!uid || !itemId) return false;
+  const localKey = `kc_user_favorites_${uid}`;
+  try {
+    const docRef = doc(db, 'users', uid, 'favorites', itemId);
+    await deleteDoc(docRef);
+    try {
+      const cached = JSON.parse(localStorage.getItem(localKey) || '[]');
+      const updated = cached.filter((f) => f.id !== itemId);
+      localStorage.setItem(localKey, JSON.stringify(updated));
+    } catch {}
+    return true;
+  } catch (err) {
+    console.warn('[removeUserFavorite]', err.message);
+    return false;
   }
 }
 

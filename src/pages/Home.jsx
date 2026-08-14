@@ -7,7 +7,7 @@ import { SectionTitle } from '../components/common/SectionTitle';
 import { SEO } from '../components/common/SEO';
 import { ProjectCard } from '../components/portfolio/ProjectCard';
 import { profile } from '../data/profile';
-import { projects } from '../data/projects';
+import { projects, getFeaturedProjects } from '../data/projects';
 import { skillGroups } from '../data/skills';
 import { timeline } from '../data/timeline';
 import { useHeroMotion } from '../hooks/useHeroMotion';
@@ -144,7 +144,7 @@ export default function Home() {
 
       <section className="section-block" id="work">
         <div className="section-heading-row"><SectionTitle number="02" eyebrow="Selected work" title="Projects shaped around real interfaces." description="A collection of web experiences built to explore visual hierarchy, responsiveness and thoughtful interaction." /><Link className="text-link" to="/projects">Explore all work <ArrowUpRight /></Link></div>
-        <div className="project-list">{projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} />)}</div>
+        <div className="project-list">{(getFeaturedProjects().length ? getFeaturedProjects() : projects).map((project, index) => <ProjectCard key={project.id || project.slug} project={project} index={index} />)}</div>
       </section>
 
       <section className="section-block tools-section" id="skills">

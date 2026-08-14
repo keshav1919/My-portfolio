@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
@@ -41,8 +41,15 @@ export function AdminLayout() {
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  // Close dropdown and sidebar on route change
+  useEffect(() => {
+    setProfileDropdownOpen(false);
+    setSidebarOpen(false);
+  }, [pathname]);
 
   const handleLockAdmin = () => {
     sessionStorage.removeItem('kc_admin_unlocked');
@@ -199,7 +206,10 @@ export function AdminLayout() {
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setProfileDropdownOpen((v) => !v)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProfileDropdownOpen((v) => !v);
+                }}
                 className="nav-avatar-btn"
                 aria-label="Open user profile menu"
                 aria-expanded={profileDropdownOpen}
