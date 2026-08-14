@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { checkUserExists } from './_firebaseAdmin.js';
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -23,7 +24,23 @@ export async function handler(event) {
     const normalizedEmail = email.toLowerCase().trim();
     const recipientName = (name || 'Developer').trim();
 
-    // 6-digit cryptographically secure OTP
+    // ─── STEP 1: Verify Email is Not Already in Use ───
+    const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
+    if (serviceAccountJson) {
+      const alreadyExists = await checkUserExists(normalizedEmail);
+      if (alreadyExists) {
+        return {
+          statusCode: 409,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            success: false,
+            error: 'An account with this email address already exists. Please log in instead.',
+          }),
+        };
+      }
+    }
+
+    // ─── STEP 2: 6-digit cryptographically secure OTP ───
     const otp = crypto.randomInt(100000, 999999).toString();
     const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
     const nonce = crypto.randomBytes(8).toString('hex');
@@ -61,7 +78,7 @@ export async function handler(event) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="x-apple-disable-message-reformatting">
-  <title>KeshavCoder Verification Code</title>
+  <title>Verify your KeshavCoder account</title>
   <style type="text/css">
     html, body {
       margin: 0 !important;
@@ -130,15 +147,15 @@ export async function handler(event) {
       <div class="email-content" style="width:100%; padding:28px 22px; box-sizing:border-box;">
         
         <div style="margin:0 0 8px; color:#777681; font-size:10px; line-height:1.4; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;">
-          Account verification
+          Account Verification
         </div>
 
         <h1 style="margin:0; padding:0; color:#18181d; font-size:22px; line-height:1.3; font-weight:700; letter-spacing:-0.4px;">
-          Your verification code
+          Welcome, ${recipientName}!
         </h1>
 
         <p style="margin:10px 0 0; padding:0; color:#72727c; font-size:14px; line-height:1.6;">
-          Enter the code below to complete registration for <strong>${normalizedEmail}</strong>.
+          Thank you for joining KeshavCoder. Please enter the single-use verification code below to verify your email address and activate your developer account.
         </p>
 
         <!-- OTP BOX -->
@@ -149,7 +166,7 @@ export async function handler(event) {
         </div>
 
         <p style="margin:0; padding:0; color:#74747d; font-size:12px; line-height:1.65;">
-          If you didn't request this verification code, you can safely ignore this email. Never share this code with anyone.
+          This code is valid for <strong>10 minutes</strong>. If you did not create a KeshavCoder account, you can safely ignore this email.
         </p>
 
         <div style="height:1px; margin:24px 0 17px; background-color:#eeeeF2;"></div>
@@ -158,7 +175,7 @@ export async function handler(event) {
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%; max-width:100%; table-layout:fixed; border-collapse:collapse;">
           <tr>
             <td style="vertical-align:middle; color:#a0a0aa; font-size:11px; line-height:1.5; word-break:break-word;">
-              Automated security email
+              Security verification email
             </td>
             <td style="vertical-align:middle; text-align:right; font-size:11px; line-height:1.5; word-break:break-word;">
               <a
@@ -202,18 +219,16 @@ export async function handler(event) {
           email: 'otp@keshavcoder.online',
         },
         to: [{ email: normalizedEmail, name: recipientName }],
-        subject: 'Your KeshavCoder verification code',
+        subject: `${otp} is your KeshavCoder verification code`,
         htmlContent,
       }),
     });
 
     if (!brevoResponse.ok) {
-      const errorData = await brevoResponse.json().catch(() => ({}));
-      console.error('[Brevo Error]', errorData.message || brevoResponse.statusText);
       return {
         statusCode: 502,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ success: false, error: 'Failed to deliver OTP email. Please try again.' }),
+        body: JSON.stringify({ success: false, error: 'Failed to deliver verification code. Please try again.' }),
       };
     }
 

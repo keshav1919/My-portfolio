@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { checkUserExists } from './_firebaseAdmin.js';
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -21,6 +22,22 @@ export async function handler(event) {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+
+    // ─── STEP 1: Authoritative Server-Side User Existence Check ───
+    // Before generating or sending ANY OTP, verify that an account actually exists.
+    const exists = await checkUserExists(normalizedEmail);
+    if (!exists) {
+      return {
+        statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          success: false,
+          error: 'No account was found with this email address. Please check your email or sign up.',
+        }),
+      };
+    }
+
+    // ─── STEP 2: Generate 6-Digit Cryptographically Secure OTP ───
     const otp = crypto.randomInt(100000, 999999).toString();
     const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
     const nonce = crypto.randomBytes(8).toString('hex');
