@@ -13,6 +13,34 @@ const defaultGithub = 'https://github.com/keshav1919';
  */
 export const projects = [
   {
+    id: 'meta-2fa',
+    slug: 'meta-2fa',
+    title: 'Meta 2FA Authenticator',
+    name: 'Meta 2FA Authenticator',
+    shortDescription: 'A browser-based 2FA TOTP authenticator with automatic OTP refresh, copy features and local account history.',
+    description: 'A browser-based 2FA TOTP authenticator with automatic OTP refresh, copy features and local account history.',
+    category: 'Web App',
+    technologies: ['React', 'JavaScript', 'Tailwind CSS', 'Web Crypto API'],
+    status: 'Live',
+    featured: true,
+    projectType: 'internal-app',
+    year: '2026',
+    image: `${import.meta.env.BASE_URL}images/projects/meta-2fa.jpg`,
+    thumbnail: `${import.meta.env.BASE_URL}images/projects/meta-2fa.jpg`,
+    coverImage: `${import.meta.env.BASE_URL}images/projects/meta-2fa.jpg`,
+    githubUrl: defaultGithub,
+    liveUrl: '/meta-2fa',
+    github: defaultGithub,
+    demo: '/meta-2fa',
+    features: [
+      'Automatic 30-second TOTP code generation and refresh',
+      'One-click secret key and OTP code copying',
+      'Local browser-only account history and fast search',
+      'SHA-256 Code ID generation for unique key identification',
+      'Responsive design for mobile, tablet, and desktop'
+    ]
+  },
+  {
     id: 'devhub',
     slug: 'devhub',
     title: 'DevHub',

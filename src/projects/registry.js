@@ -15,6 +15,7 @@ import { lazy } from 'react';
  */
 export const internalApps = {
   devhub: lazy(() => import('./devhub/DevHubApp')),
+  'meta-2fa': lazy(() => import('./meta-2fa/Meta2FAApp')),
 };
 
 export const hasInternalApp = (slug) => {

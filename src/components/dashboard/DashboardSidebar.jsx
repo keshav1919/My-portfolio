@@ -14,7 +14,8 @@ import {
   User,
   Shield,
   ArrowUpRight,
-  X
+  X,
+  KeyRound
 } from 'lucide-react';
 
 const DASHBOARD_NAV = [
@@ -27,6 +28,7 @@ const DASHBOARD_NAV = [
   { label: 'VS Code Shortcuts', path: '/dashboard/shortcuts', icon: Keyboard },
   { label: 'Resources', path: '/dashboard/resources', icon: BookOpen },
   { label: 'Favorites', path: '/dashboard/favorites', icon: Bookmark },
+  { label: 'Meta 2FA', path: '/meta-2fa', icon: KeyRound },
 ];
 
 /** Returns true when viewport is >= 1024px (Tailwind lg) */

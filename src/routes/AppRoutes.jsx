@@ -17,6 +17,7 @@ const Experience = lazy(() => import('../pages/Experience'));
 const Contact = lazy(() => import('../pages/Contact'));
 const SavedPage = lazy(() => import('../pages/SavedPage'));
 const Settings = lazy(() => import('../pages/Settings'));
+const Meta2FAApp = lazy(() => import('../projects/meta-2fa/Meta2FAApp'));
 
 // Auth Pages
 const Login = lazy(() => import('../pages/auth/Login'));
@@ -67,6 +68,9 @@ export function AppRoutes() {
           <Route path="/saved" element={<SavedPage />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
+        
+        {/* Meta 2FA Authenticator Standalone Route */}
+        <Route path="/meta-2fa" element={<Meta2FAApp />} />
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />

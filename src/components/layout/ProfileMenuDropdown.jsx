@@ -11,7 +11,8 @@ import {
   LogOut,
   Contrast,
   LogIn,
-  UserPlus
+  UserPlus,
+  KeyRound
 } from 'lucide-react';
 
 export function ProfileMenuDropdown({ onClose }) {
@@ -136,6 +137,11 @@ export function ProfileMenuDropdown({ onClose }) {
         <Link to="/saved" onClick={onClose} style={itemStyle} className={itemClass}>
           <Bookmark className="w-4 h-4 text-kc-muted shrink-0" />
           <span>Saved</span>
+        </Link>
+
+        <Link to="/meta-2fa" onClick={onClose} style={itemStyle} className={itemClass}>
+          <KeyRound className="w-4 h-4 text-kc-muted shrink-0" />
+          <span>Meta 2FA</span>
         </Link>
 
         <Link to="/home" onClick={onClose} style={itemStyle} className={`${itemClass} justify-between`}>

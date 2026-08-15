@@ -12,7 +12,7 @@ export function ProjectCard({ project, index = 0 }) {
   const liveUrl = project.liveUrl || project.demo;
   const githubUrl = project.githubUrl || project.github;
   const slug = project.slug || project.name?.toLowerCase().replace(/\s+/g, '-');
-  const internalLink = `/projects/${slug}`;
+  const internalLink = project.liveUrl?.startsWith('/') ? project.liveUrl : `/projects/${slug}`;
   const isExternalOnly = project.projectType === 'external' && liveUrl;
   const primaryHref = isExternalOnly ? liveUrl : internalLink;
 
@@ -57,12 +57,12 @@ export function ProjectCard({ project, index = 0 }) {
             </a>
           ) : (
             <Link to={internalLink}>
-              <span>View details</span>
+              <span>{project.projectType === 'internal-app' ? 'Open Project' : 'View details'}</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           )}
 
-          {!isExternalOnly && liveUrl && project.status !== 'Coming Soon' && (
+          {!isExternalOnly && liveUrl && liveUrl !== internalLink && project.status !== 'Coming Soon' && (
             <a href={liveUrl} target="_blank" rel="noopener noreferrer" title="Direct live link">
               <span>Live demo</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
